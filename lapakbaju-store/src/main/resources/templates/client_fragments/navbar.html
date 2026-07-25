@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="client-navbar">
-    <link rel="stylesheet" th:href="@{/css/client_css/navbar.css}">
-<!--    <link rel="stylesheet" href="/css/client_css/navbar.css">-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>navbar</title>
+
+    <th:block th:fragment="client-navbar">
+        <link rel="stylesheet" th:href="@{/css/client_css/navbar.css}">
+    </th:block>
 </head>
     <body>
         <th:block th:fragment="navbar-fragment">

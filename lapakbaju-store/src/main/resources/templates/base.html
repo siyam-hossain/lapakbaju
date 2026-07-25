@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <title>LapakBaju</title>
     <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+    <th:block th:replace="~{client_fragments/banner.html :: client-banner-css}"></th:block>
 </head>
     <body>
         <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
 
+        <main>
+            <th:block th:replace="~{client_fragments/banner.html :: client-banner}"></th:block>
+        </main>
+
 
 
         <th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+        <th:block th:replace="~{client_fragments/banner.html :: client-banner-js}"></th:block>
     </body>
 </html>

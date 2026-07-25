@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive E-Commerce Banner Slider</title>
+
+  <th:block th:fragment="client-banner-css">
+    <link rel="stylesheet" th:href="@{/css/client_css/banner.css}">
+  </th:block>
+</head>
+<body>
+
+  <th:block th:fragment="client-banner">
+    <section class="container banner-container">
+      <div class="banner-slider" id="bannerSlider">
+
+        <!-- Slide 1 -->
+        <div class="banner-slide active">
+          <div class="banner-content">
+            <span class="badge">LIMITED TIME</span>
+            <h2>Next-Gen Wireless Pro Audio</h2>
+            <p>Experience studio-grade active noise cancellation and 40-hour battery life.</p>
+            <a href="#shop" class="btn-primary">Shop Now &rarr;</a>
+          </div>
+
+          <div class="banner-image">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800" alt="Wireless Headphones">
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="banner-slide">
+          <div class="banner-content">
+            <span class="badge">BEST SELLER</span>
+            <h2>Ultra HD Smart Fitness Watch</h2>
+            <p>Track your health metrics seamlessly with an all-day AMOLED display.</p>
+            <a href="#shop" class="btn-primary">Explore Deal &rarr;</a>
+          </div>
+          <div class="banner-image">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800" alt="Smart Watch">
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="banner-slide">
+          <div class="banner-content">
+            <span class="badge">NEW RELEASE</span>
+            <h2>Pro Cinematic Camera Gear</h2>
+            <p>Capture crystal clear 8K moments with absolute precision.</p>
+            <a href="#shop" class="btn-primary">Pre-Order &rarr;</a>
+          </div>
+          <div class="banner-image">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800" alt="Camera Gear">
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="slider-btn prev-btn" id="prevBtn">&#10094;</button>
+      <button class="slider-btn next-btn" id="nextBtn">&#10095;</button>
+
+      <!-- Dots Indicators -->
+      <div class="slider-dots" id="sliderDots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+      </div>
+    </section>
+  </th:block>
+
+
+  <th:block th:fragment="client-banner-js">
+    <script th:src="@{/js/client_js/banner.js}"></script>
+  </th:block>
+</body>
+</html>
