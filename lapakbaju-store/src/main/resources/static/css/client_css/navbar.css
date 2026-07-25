@@ -1,0 +1,172 @@
+/*
+    global settings
+*/
+@import url("../global.css");
+
+
+/* ----------------------------------
+Navbar
+-----------------------------------*/
+
+nav{
+    /*position:sticky;*/
+    top:0;
+    background:#fff;
+    border-bottom:1px solid var(--gray-200);
+    padding: 2rem 0;
+    position: relative;
+    z-index: 1000;
+}
+
+.nav-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.navbar-brand{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    text-decoration:none;
+    color:#000;
+    font-size:20px;
+    font-weight:500;
+}
+
+.navbar-brand span span{
+    font-weight:bold;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+}
+
+.nav-right-items{
+    display:flex;
+    align-items:center;
+    gap:2rem;
+    list-style:none;
+}
+
+.nav-right-items a
+{
+    font-size: 1.1rem;
+    text-decoration:none;
+    color:var(--gray-700);
+    transition:.25s;
+    font-weight: 500;
+}
+
+.nav-right-items a:hover{
+    color:var(--primary);
+}
+.btn-container
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#nav-login {
+    height: 100%;
+    padding: .5rem 2.5rem;
+    background-color: var(--primary);
+    border-radius: 8px;
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#nav-login a {
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #ffffff;
+}
+
+
+/* Buttons */
+
+.nav-menu-btn,
+.nav-close-btn{
+    display:none;
+    background:none;
+    border:none;
+    cursor:pointer;
+}
+
+.nav-menu-btn svg,
+.nav-close-btn svg{
+    width:30px;
+    height:30px;
+}
+
+/* -------------------------------
+Mobile
+--------------------------------*/
+
+@media (max-width:760px)
+{
+
+    .nav-menu-btn{
+        display:block;
+    }
+
+    .nav-right.active .nav-menu-btn {
+        display: none;
+    }
+
+    .nav-right.active .nav-close-btn {
+        display: block;
+    }
+
+    .nav-right-items{
+        display: none;
+    }
+
+    .nav-right-items.show{
+        display: flex;
+        background-color: var(--background);
+        width: 100%;
+        position: absolute;
+        top: 72.38px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: var(--shadow-md);
+        padding-bottom: 1rem;
+    }
+
+    .nav-right-items li{
+        padding: 1rem;
+        width: 100%;
+        border-bottom: 1px solid var(--gray-100);
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .btn-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #nav-login
+    {
+        font-weight: 500;
+        width: 100%;
+        padding: 1rem 2.5rem;
+    }
+
+    #nav-login a {
+        font-size: 1rem;
+    }
+}
