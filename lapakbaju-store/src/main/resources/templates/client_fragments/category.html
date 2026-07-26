@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category</title>
+    <th:block th:fragment="client-category-css">
+        <link rel="stylesheet" th:href="@{/css/client_css/category.css}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </th:block>
+</head>
+<body>
+    <th:block th:fragment="client-category">
+        <div class="container category-container">
+            <div class="category-track" id="categoryTrack">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="client-category-js">
+        <script th:src="@{/js/client_js/category.js}"></script>
+    </th:block>
+</body>
+</html>

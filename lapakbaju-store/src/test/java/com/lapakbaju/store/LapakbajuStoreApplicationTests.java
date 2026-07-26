@@ -1,4 +1,4 @@
-package com.lapakbaju.lapakbajustore;
+package com.lapakbaju.store;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
