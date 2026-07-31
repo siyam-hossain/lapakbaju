@@ -63,7 +63,7 @@
 }
 
 body{
-    font-family:system-ui, sans-serif;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     min-height:100vh;
     min-height: 100dvh;
     background:var(--background);
@@ -77,4 +77,8 @@ Bootstrap-like Container
     max-width: 1200px;
     margin-inline: auto;
     padding-inline: 1.5rem;
+}
+.main-container{
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
 }
