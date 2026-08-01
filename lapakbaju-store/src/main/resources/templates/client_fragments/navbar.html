@@ -6,7 +6,7 @@
     <title>navbar</title>
 
     <th:block th:fragment="client-navbar">
-        <link rel="stylesheet" th:href="@{/css/client_css/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/client/navbar.css}">
     </th:block>
 </head>
     <body>
@@ -30,8 +30,8 @@
                             <li><a href="#" class="nav-link">Category</a></li>
                             <li><a href="#" class="nav-link">Products</a></li>
                             <li class="btn-container">
-                                <button id="nav-login">
-                                    <a href="#" class="nav-link">Login</a>
+                                <button id="nav-login" class="nav-link" th:onclick="|location.href='@{/login}'|">
+                                    Login
                                 </button>
                             </li>
                         </ul>

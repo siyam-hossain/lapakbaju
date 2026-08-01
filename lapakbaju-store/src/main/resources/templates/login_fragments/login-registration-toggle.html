@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Registration Toggle</title>
+</head>
+<body>
+
+    <th:block th:fragment="login-registration-toggle">
+        <div class="form-switcher">
+            <div class="switcher-bg" id="switcherBg"></div>
+            <button class="switcher-btn active" id="loginTab">Login</button>
+            <button class="switcher-btn" id="registerTab">Register</button>
+        </div>
+    </th:block>
+
+</body>
+</html>

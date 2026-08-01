@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel</title>
+
+    <th:block th:fragment="carousel-css">
+        <link rel="stylesheet" th:href="@{/css/carousel/carousel.css}">
+    </th:block>
+
+</head>
+<body>
+    <th:block th:fragment="carousel">
+        <div class="container carosuel-container">
+            <!-- Forward Marquee -->
+            <h2>Featured Official Brands</h2>
+            <div class="carousel">
+                <div class="group forward">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Logo_NIKE.svg" alt="Nike">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Adidas_Logo.svg" alt="Adidas">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/H%26M-Logo.svg" alt="H&M">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Levi's_logo.svg" alt="Levi's">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Puma-logo-(text).svg" alt="Puma">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Zara_Logo.svg" alt="Zara">
+                </div>
+                <div class="group forward" aria-hidden="true">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Logo_NIKE.svg" alt="Nike">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Adidas_Logo.svg" alt="Adidas">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/H%26M-Logo.svg" alt="H&M">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Levi's_logo.svg" alt="Levi's">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Puma-logo-(text).svg" alt="Puma">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Zara_Logo.svg" alt="Zara">
+                </div>
+            </div>
+
+            <!-- Reverse Marquee -->
+            <div class="carousel">
+                <div class="group reverse">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Bose_logo.svg" alt="Bose">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Canon_logo.svg" alt="Canon">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/JBL_logo.svg" alt="JBL">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Samsung_logo.svg" alt="Samsung">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Sephora_logo.svg" alt="Sephora">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Sony_logo.svg" alt="Sony">
+                </div>
+                <div class="group reverse" aria-hidden="true">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Bose_logo.svg" alt="Bose">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Canon_logo.svg" alt="Canon">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/JBL_logo.svg" alt="JBL">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Samsung_logo.svg" alt="Samsung">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Sephora_logo.svg" alt="Sephora">
+                    <img class="logo" src="https://raw.githubusercontent.com/siyam-hossain/images/d71763771f80384f012687dd7637d7a336f1cf3d/LapakBaju/brands-logos/Sony_logo.svg" alt="Sony">
+                </div>
+            </div>
+        </div>
+    </th:block>
+</body>
+</html>

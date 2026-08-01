@@ -1,0 +1,57 @@
+.carosuel-container{
+    margin: 1rem auto;
+    width: 90%;
+
+    border: 1px solid #e7e7e7;
+    border-radius: 16px;
+}
+.carosuel-container h2{
+    text-align: center;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #351c14;
+    margin-bottom: 3rem;
+}
+.carousel {
+    display: flex;
+    overflow: hidden;
+}
+
+.group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+    min-width: 100%;
+}
+
+.forward {
+    animation: spin 10s linear infinite;
+}
+
+.reverse {
+    animation: spin 10s linear infinite reverse;
+}
+
+.logo {
+    /*width: 5em;*/
+    height: 4em;
+    padding: 1em 2em;
+
+    filter: grayscale(100%) opacity(0.5);
+    transition: filter 0.3s ease, transform 0.3s ease; /* Fixed '0.3' to '0.3s' */
+    cursor: pointer;
+}
+
+.logo:hover {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.1);
+}
+
+@keyframes spin {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}

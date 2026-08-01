@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login-Registration</title>
+
+  <link rel="stylesheet" th:href="@{/css/login/login.css}">
+
+</head>
+
+<body>
+
+  <div class="login-reg">
+
+    <th:block th:replace="~{/login_fragments/brand-logo.html :: brand-logo}">
+
+    </th:block>
+
+    <!-- Auth Card -->
+    <div class="auth-container">
+
+      <!-- Top Form Toggle -->
+      <th:block th:replace="~{/login_fragments/login-registration-toggle :: login-registration-toggle}">
+
+      </th:block>
+
+
+      <div class="forms-wrapper">
+
+        <!-- LOGIN FORM -->
+        <th:block th:replace="~{/login_fragments/login-form.html :: login-fragment}">
+
+        </th:block>
+
+
+        <!-- REGISTRATION FORM -->
+        <th:block th:replace="~{/login_fragments/registration-form.html :: registration-fragment}">
+
+        </th:block>
+
+
+      </div>
+    </div>
+  </div>
+
+
+<script th:src="@{/js/login_js/login.js}"></script>
+</body>
+
+</html>

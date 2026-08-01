@@ -80,6 +80,9 @@ nav{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+
+    font-size: var(--fs-small);
+    color: var(--surface);
 }
 
 #nav-login a {
