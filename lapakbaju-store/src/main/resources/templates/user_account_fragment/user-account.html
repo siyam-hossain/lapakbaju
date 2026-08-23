@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>My Account | LapakBaju</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/user_account/user-account.css}" />
+
+  <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+  <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+
+</head>
+<body>
+  <header>
+    <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+  </header>
+
+<!-- ==================== MAIN ==================== -->
+
+  <main class="account-page">
+    <div class="container">
+      <!-- Page Header -->
+
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">ACCOUNT</p>
+
+          <h1>My Account</h1>
+
+          <p class="page-description">
+            Manage your profile, orders, addresses and account settings.
+          </p>
+        </div>
+      </section>
+
+      <!-- Account Layout -->
+
+      <div class="account-layout">
+        <!-- ==================== CONTENT ==================== -->
+
+        <section class="account-content">
+          <!-- Welcome -->
+
+          <div class="welcome-card">
+            <div class="welcome-content">
+              <span class="welcome-label"> WELCOME BACK </span>
+
+              <h2>
+                Hello,
+                <span th:text="${userName}"> Siyam Hossain </span>
+                👋
+              </h2>
+
+              <p>Here's what's happening with your LapakBaju account.</p>
+            </div>
+
+            <div class="welcome-decoration">L</div>
+          </div>
+
+          <!-- ==================== STATS ==================== -->
+
+          <div class="stats-grid">
+            <a href="/orders" class="stat-card">
+              <div class="stat-icon purple">
+                <svg viewBox="0 0 24 24">
+                  <path d="M6 3h12v18H6z"></path>
+                  <path d="M9 7h6"></path>
+                  <path d="M9 11h6"></path>
+                </svg>
+              </div>
+
+              <div class="stat-info">
+                <span>Total Orders</span>
+
+                <strong>12</strong>
+              </div>
+
+              <span class="stat-arrow">→</span>
+            </a>
+
+            <a href="/orders?status=pending" class="stat-card">
+              <div class="stat-icon orange">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="8"></circle>
+                  <path d="M12 8v5l3 2"></path>
+                </svg>
+              </div>
+
+              <div class="stat-info">
+                <span>Pending</span>
+
+                <strong>2</strong>
+              </div>
+
+              <span class="stat-arrow">→</span>
+            </a>
+
+            <a href="/wishlist" class="stat-card">
+              <div class="stat-icon pink">
+                <svg viewBox="0 0 24 24">
+                  <path
+                          d="M20.8 8.7c0 5.5-8.8 10.3-8.8 10.3S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.3a4.7 4.7 0 0 1 8.8 2.4Z"
+                  ></path>
+                </svg>
+              </div>
+
+              <div class="stat-info">
+                <span>Wishlist</span>
+
+                <strong>8</strong>
+              </div>
+
+              <span class="stat-arrow">→</span>
+            </a>
+          </div>
+
+          <!-- ==================== PROFILE ==================== -->
+
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Personal Information</h3>
+
+                <p>Your basic account information.</p>
+              </div>
+
+              <a href="/account/edit" class="outline-button">
+                Edit Profile
+              </a>
+            </div>
+
+            <div class="profile-information">
+              <div class="large-avatar">
+                    <span
+                            th:text="${#strings.substring(userName, 0, 1).toUpperCase()}"
+                    >
+                      S
+                    </span>
+              </div>
+
+              <div class="profile-details">
+                <div class="detail-item">
+                  <span class="detail-label"> Full Name </span>
+
+                  <strong th:text="${userName}"> Siyam Hossain </strong>
+                </div>
+
+                <div class="detail-item">
+                  <span class="detail-label"> Email Address </span>
+
+                  <strong th:text="${email}"> s@gmail.com </strong>
+                </div>
+
+                <div class="detail-item">
+                  <span class="detail-label"> Phone Number </span>
+
+                  <strong> +880 1XXX-XXXXXX </strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== RECENT ORDERS ==================== -->
+
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Recent Orders</h3>
+
+                <p>Track your latest purchases.</p>
+              </div>
+
+              <a href="/orders" class="text-button"> View all → </a>
+            </div>
+
+            <div class="orders-list">
+              <div class="order-row">
+                <div class="order-product">
+                  <div class="product-placeholder">T</div>
+
+                  <div>
+                    <strong> Oversized Cotton T-Shirt </strong>
+
+                    <span> Order #LB-1024 </span>
+                  </div>
+                </div>
+
+                <div class="order-date">Aug 20, 2026</div>
+
+                <div class="order-price">৳ 1,290</div>
+
+                <span class="status delivered"> Delivered </span>
+              </div>
+
+              <div class="order-row">
+                <div class="order-product">
+                  <div class="product-placeholder">H</div>
+
+                  <div>
+                    <strong> Premium Hoodie </strong>
+
+                    <span> Order #LB-1019 </span>
+                  </div>
+                </div>
+
+                <div class="order-date">Aug 16, 2026</div>
+
+                <div class="order-price">৳ 2,450</div>
+
+                <span class="status processing"> Processing </span>
+              </div>
+
+              <div class="order-row">
+                <div class="order-product">
+                  <div class="product-placeholder">J</div>
+
+                  <div>
+                    <strong> Relaxed Fit Jeans </strong>
+
+                    <span> Order #LB-1012 </span>
+                  </div>
+                </div>
+
+                <div class="order-date">Aug 10, 2026</div>
+
+                <div class="order-price">৳ 2,100</div>
+
+                <span class="status shipped"> Shipped </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ADDRESS ==================== -->
+
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Default Address</h3>
+
+                <p>Your primary delivery address.</p>
+              </div>
+
+              <a href="/addresses" class="text-button"> Manage → </a>
+            </div>
+
+            <div class="address-box">
+              <div class="address-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                          d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
+                  ></path>
+                  <circle cx="12" cy="10" r="2.5"></circle>
+                </svg>
+              </div>
+
+              <div class="address-content">
+                <div class="address-title">
+                  <strong> Home </strong>
+                  <span class="default-badge"> Default </span>
+                </div>
+
+                <p>
+                  123 Main Street, Demra<br />
+                  Dhaka 1360, Bangladesh
+                </p>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+    </div>
+  </main>
+
+<!-- ==================== FOOTER ==================== -->
+  <th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+
+
+  <th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+  <script th:src="@{/js/user_account_js/account.js}"></script>
+</body>
+</html>

@@ -7,15 +7,16 @@
 /* ----------------------------------
 Navbar
 -----------------------------------*/
-
-nav{
-    /*position:sticky;*/
+header{
+    position:sticky;
     top:0;
+    z-index: 1000;
+}
+nav{
     background:#fff;
     border-bottom:1px solid var(--gray-200);
     padding: 2rem 0;
-    position: relative;
-    z-index: 1000;
+    /*position: relative;*/
 }
 
 .nav-container{
