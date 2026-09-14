@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/user_profile/user-profile.css}"/>
+  <link rel="stylesheet" th:href="@{/css/navbar/navbar.css}">
+
+  <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+</head>
+
+<body>
+
+<header>
+  <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<!-- ==================== MAIN ==================== -->
+<main class="account-page">
+  <div class="container">
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+      <div>
+        <p class="eyebrow">ACCOUNT</p>
+        <h1>My Account</h1>
+        <p class="page-description">Manage your profile, orders, addresses and account settings.</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNT LAYOUT -->
+    <div class="account-layout">
+
+      <section class="account-content">
+
+        <!-- WELCOME -->
+        <div class="welcome-card">
+          <div class="welcome-content">
+            <span class="welcome-label">WELCOME BACK</span>
+            <h2>Hello, <span th:text="${user.name}">Siyam Hossain</span> 👋</h2>
+            <p>Here's what's happening with your LapakBaju account.</p>
+          </div>
+          <div class="welcome-decoration">L</div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <!-- Orders -->
+          <div class="stat-card">
+            <div class="stat-icon purple">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 3h12v18H6z"></path>
+                <path d="M9 7h6"></path>
+                <path d="M9 11h6"></path>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span>Total Orders</span>
+              <strong th:text="${user.orders != null ? #lists.size(user.orders) : 0}">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERSONAL INFORMATION -->
+        <section class="content-card profile-card">
+          <div class="card-header">
+            <div>
+              <h3>Personal Information</h3>
+              <p>Your basic account information.</p>
+            </div>
+          </div>
+
+          <!-- PROFILE VIEW -->
+          <div class="profile-information" id="profileView">
+            <div class="large-avatar">
+              <img th:if="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                   th:src="@{'/uploads/profile/' + ${user.profileImage}}" alt="Profile Image"/>
+              <span th:unless="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                    th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">S</span>
+            </div>
+
+            <div class="profile-details">
+              <div class="detail-item">
+                <span class="detail-label">Full Name</span>
+                <strong th:text="${user.name}">Siyam Hossain</strong>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Email Address</span>
+                <strong th:text="${user.email}">s@gmail.com</strong>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">Account Type</span>
+                <strong th:text="${user.role}">USER</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RECENT ORDERS -->
+        <section class="content-card">
+          <div class="card-header">
+            <div>
+              <h3>Recent Orders</h3>
+              <p>Track your latest purchases.</p>
+            </div>
+          </div>
+
+          <div class="orders-list">
+            <!-- No orders -->
+            <div th:if="${user.orders == null or #lists.isEmpty(user.orders)}" class="order-row">
+              <div class="order-product">
+                <div class="product-placeholder">-</div>
+                <div>
+                  <strong>No orders yet</strong>
+                  <span>You haven't placed any orders.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Orders -->
+            <div class="order-row" th:each="order : ${user.orders}">
+              <div class="order-product">
+                <div class="product-placeholder">O</div>
+                <div>
+                  <strong th:text="${order.orderNumber}">LB-1024</strong>
+                  <span th:text="'Order #' + ${order.orderNumber}">Order #LB-1024</span>
+                </div>
+              </div>
+
+              <div class="order-date" th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'MMM dd, yyyy') : 'N/A'}">
+                Aug 20, 2026
+              </div>
+
+              <div class="order-price" th:text="'$ ' + ${order.totalPrice}">$ 1,290</div>
+              <span class="status" th:text="${order.status}">Delivered</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADDRESS -->
+        <section class="content-card">
+          <div class="card-header">
+            <div>
+              <h3>Default Address</h3>
+              <p>Your primary delivery address.</p>
+            </div>
+          </div>
+
+          <!-- Address exists -->
+          <div class="address-box" th:if="${user.address != null}">
+            <div class="address-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+            </div>
+
+            <div class="address-content">
+              <div class="address-title">
+                <strong>Home</strong>
+                <span class="default-badge">Default</span>
+              </div>
+
+              <p>
+                <span th:text="${user.address.addressLine}">123 Main Street</span><br/>
+                <span th:text="${user.address.city}">Dhaka</span>
+                <span th:if="${user.address.postalCode != null}" th:text="' ' + ${user.address.postalCode}"> 1360</span><br/>
+                <span th:text="${user.address.country}">Bangladesh</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- No address -->
+          <div class="address-box" th:unless="${user.address != null}">
+            <div class="address-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+            </div>
+
+            <div class="address-content">
+              <div class="address-title">
+                <strong>No Address</strong>
+              </div>
+              <p>You haven't added a delivery address yet.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ACCOUNT ACTIONS -->
+        <div class="account-actions">
+          <a th:href="@{/edit/profile}" class="account-action-button update-button" style="text-decoration: none;">
+            <svg viewBox="0 0 24 24">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Edit Profile
+          </a>
+
+          <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="account-action-button logout-button">
+              <svg viewBox="0 0 24 24">
+                <path d="M10 17l5-5-5-5"></path>
+                <path d="M15 12H3"></path>
+                <path d="M21 19V5a2 2 0 0 0-2-2h-6"></path>
+              </svg>
+              Logout
+            </button>
+          </form>
+        </div>
+
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER & SCRIPTS -->
+<th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+<th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+<script th:src="@{/js/user_account_js/user-account.js}"></script>
+
+</body>
+</html>

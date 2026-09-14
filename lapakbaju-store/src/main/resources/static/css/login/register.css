@@ -1,4 +1,4 @@
-/* Base Reset & Layout */
+/* Base Reset & Universal Styling */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -43,7 +43,7 @@ body {
     border-radius: 4px;
 }
 
-/* Card Container */
+/* Main Container */
 .auth-container {
     background: #ffffff;
     width: 100%;
@@ -52,15 +52,29 @@ body {
     padding: 36px 32px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
     border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Form Styles */
+/* Forms Wrapper & Hidden State Handling */
+.forms-wrapper {
+    position: relative;
+}
+
 .auth-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
+.auth-form.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* Header Text */
 .form-header {
     margin-bottom: 6px;
 }
@@ -77,7 +91,7 @@ body {
     margin-top: 4px;
 }
 
-/* Inputs & Labels */
+/* Input Fields & Icons */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -123,33 +137,13 @@ body {
     pointer-events: none;
 }
 
-/* Form Helpers (Remember Me & Forgot Password) */
-.form-helpers {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.field-error {
     font-size: 12px;
+    color: #ef4444;
+    margin-top: 2px;
 }
 
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #64748b;
-    cursor: pointer;
-}
-
-.forgot-link {
-    color: #4318ff;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.forgot-link:hover {
-    text-decoration: underline;
-}
-
-/* Submit Button */
+/* Primary Submit Button */
 .submit-btn {
     background: #4318ff;
     color: #ffffff;
@@ -172,6 +166,7 @@ body {
 .submit-btn:active {
     transform: translateY(0);
 }
+
 /* Auth Footer Redirect Link */
 .auth-footer {
     text-align: center;

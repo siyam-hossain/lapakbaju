@@ -1,6 +1,6 @@
 package com.lapakbaju.store.controller.category;
 
-import com.lapakbaju.store.entity.Category;
+import com.lapakbaju.store.entity.category.Category;
 import com.lapakbaju.store.service.CategoryService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

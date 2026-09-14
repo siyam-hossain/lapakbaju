@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LapakBaju</title>
+    <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+    <th:block th:replace="~{client_fragments/banner.html :: client-banner-css}"></th:block>
+    <th:block th:replace="~{client_fragments/category.html :: client-category-css}"></th:block>
+    <th:block th:replace="~{product_fragments/popular-product.html :: popular-product-css}"></th:block>
+    <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+    <th:block th:replace="~{brand_logo_carousel_fragments/carousel.html :: carousel-css}"></th:block>
+</head>
+<body>
+<header>
+    <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<main class="main-container">
+    <th:block th:replace="~{client_fragments/banner.html :: client-banner}"></th:block>
+    <th:block th:replace="~{client_fragments/category.html :: client-category}"></th:block>
+    <th:block th:replace="~{product_fragments/popular-product.html :: popular-product}"></th:block>
+
+    <th:block th:replace="~{brand_logo_carousel_fragments/carousel.html :: carousel}"></th:block>
+</main>
+
+<th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+
+<th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+<th:block th:replace="~{client_fragments/banner.html :: client-banner-js}"></th:block>
+<th:block th:replace="~{client_fragments/category.html :: client-category-js}"></th:block>
+<th:block th:replace="~{product_fragments/popular-product.html :: popular-product-js}"></th:block>
+</body>
+</html>

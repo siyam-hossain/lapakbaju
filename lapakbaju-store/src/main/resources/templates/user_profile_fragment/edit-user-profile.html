@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profile - My Account</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/navbar/navbar.css}">
+  <link rel="stylesheet" th:href="@{/css/user_profile/edit-user-profile.css}"/>
+
+  <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+</head>
+
+<body>
+
+<header>
+  <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<!-- ==================== MAIN ==================== -->
+<main class="account-page">
+  <div class="container">
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+      <div>
+        <p class="eyebrow">ACCOUNT SETTINGS</p>
+        <h1>Edit Profile</h1>
+        <p class="page-description">Update your personal information and delivery address.</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNT LAYOUT -->
+    <div class="account-layout">
+      <section class="account-content">
+
+        <!-- MAIN EDIT FORM -->
+        <form id="editProfileForm" th:action="@{/edit/profile}" method="post" enctype="multipart/form-data">
+
+          <!-- PROFILE PICTURE EDIT SECTION -->
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Profile Picture</h3>
+                <p>Upload a new avatar or change your existing image.</p>
+              </div>
+            </div>
+
+            <div class="edit-avatar-section">
+              <div class="edit-avatar" id="editAvatar">
+                <img id="profileImagePreview"
+                     th:if="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                     th:src="@{'/uploads/profile/' + ${user.profileImage}}" alt="Profile Preview"/>
+                <span id="avatarInitial"
+                      th:unless="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                      th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">S</span>
+              </div>
+
+              <div class="image-upload-content">
+                <label for="profileImage" class="upload-button">
+                  <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+                    <path d="M12 16V4"></path>
+                    <path d="m7 9 5-5 5 5"></path>
+                    <path d="M5 20h14"></path>
+                  </svg>
+                  Upload Image
+                </label>
+                <input type="file" id="profileImage" name="profileImage" accept="image/png,image/jpeg,image/webp"/>
+                <span class="upload-help">JPG, PNG or WebP</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- PERSONAL INFORMATION (READ-ONLY) -->
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Personal Information</h3>
+                <p>Basic user metadata (non-editable).</p>
+              </div>
+            </div>
+
+            <div class="edit-fields">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" th:value="${user.name}" readonly disabled class="read-only-input"/>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" th:value="${user.email}" readonly disabled class="read-only-input"/>
+              </div>
+
+              <div class="form-group">
+                <label for="role">Account Type</label>
+                <input type="text" id="role" th:value="${user.role}" readonly disabled class="read-only-input"/>
+              </div>
+            </div>
+          </section>
+
+          <!-- ADDRESS SECTION (EDITABLE) -->
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Delivery Address</h3>
+                <p>Update your shipping address details.</p>
+              </div>
+            </div>
+
+            <div class="edit-fields">
+              <div class="form-group full-width">
+                <label for="addressLine">Street Address / Line</label>
+                <input type="text" id="addressLine" name="addressLine"
+                       th:value="${user.address != null ? user.address.addressLine : ''}"
+                       placeholder="e.g. 123 Main Street, Apt 4B" required/>
+              </div>
+
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city"
+                       th:value="${user.address != null ? user.address.city : ''}"
+                       placeholder="e.g. Dhaka" required/>
+              </div>
+
+              <div class="form-group">
+                <label for="postalCode">Postal Code</label>
+                <input type="text" id="postalCode" name="postalCode"
+                       th:value="${user.address != null ? user.address.postalCode : ''}"
+                       placeholder="e.g. 1212"/>
+              </div>
+
+              <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country"
+                       th:value="${user.address != null ? user.address.country : ''}"
+                       placeholder="e.g. Bangladesh" required/>
+              </div>
+            </div>
+          </section>
+
+          <!-- STATS OVERVIEW (READ-ONLY) -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon purple">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2">
+                  <path d="M6 3h12v18H6z"></path>
+                  <path d="M9 7h6"></path>
+                  <path d="M9 11h6"></path>
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span>Total Orders</span>
+                <strong th:text="${user.orders != null ? #lists.size(user.orders) : 0}">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT ORDERS (READ-ONLY) -->
+          <section class="content-card">
+            <div class="card-header">
+              <div>
+                <h3>Recent Orders</h3>
+                <p>Order history overview (read-only).</p>
+              </div>
+            </div>
+
+            <div class="orders-list">
+              <!-- No orders -->
+              <div th:if="${user.orders == null or #lists.isEmpty(user.orders)}" class="order-row">
+                <div class="order-product">
+                  <div class="product-placeholder">-</div>
+                  <div>
+                    <strong>No orders yet</strong>
+                    <span>You haven't placed any orders.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- User Orders -->
+              <div class="order-row" th:each="order : ${user.orders}">
+                <div class="order-product">
+                  <div class="product-placeholder">O</div>
+                  <div>
+                    <strong th:text="${order.orderNumber}">LB-1024</strong>
+                    <span th:text="'Order #' + ${order.orderNumber}">Order #LB-1024</span>
+                  </div>
+                </div>
+
+                <div class="order-date" th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'MMM dd, yyyy') : 'N/A'}">
+                  Aug 20, 2026
+                </div>
+
+                <div class="order-price" th:text="'৳ ' + ${order.totalPrice}">৳ 1,290</div>
+                <span class="status" th:text="${order.status}">Delivered</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- BOTTOM ACTION BUTTONS -->
+          <div class="account-actions">
+            <a th:href="@{/account}" class="outline-button" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px;">
+              Cancel
+            </a>
+
+            <button type="submit" class="account-action-button update-button">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+                <path d="M17 21v-8H7v8"></path>
+                <path d="M7 3v5h8"></path>
+              </svg>
+              Update Profile
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER & SCRIPTS -->
+<th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+<th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+<script th:src="@{/js/user_account_js/user-account.js}"></script>
+
+<!-- IMAGE PREVIEW SCRIPT -->
+<script>
+  document.getElementById('profileImage')?.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let img = document.getElementById('profileImagePreview');
+        const avatarBox = document.getElementById('editAvatar');
+        const initial = document.getElementById('avatarInitial');
+
+        if (initial) initial.style.display = 'none';
+
+        if (!img) {
+          img = document.createElement('img');
+          img.id = 'profileImagePreview';
+          img.alt = 'Profile Preview';
+          avatarBox.appendChild(img);
+        }
+        img.src = e.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -6,53 +6,73 @@
     <title>navbar</title>
 
     <th:block th:fragment="client-navbar">
-        <link rel="stylesheet" th:href="@{/css/client/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/navbar/navbar.css}">
     </th:block>
 </head>
-    <body>
-        <th:block th:fragment="navbar-fragment">
-            <nav>
-                <div class="container nav-container">
-                    <!-- Logo -->
-                    <a class="navbar-brand" href="#">
-                        <svg width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M12 2L2 22H7L12 12L17 22H22L12 2Z" fill="#3B38C3"/>
-                            <path d="M12 15L9 21H15L12 15Z" fill="#fff"/>
-                        </svg>
-                        <span>lapak<span>baju</span></span>
-                    </a>
+<body>
+<th:block th:fragment="navbar-fragment">
+    <nav>
+        <div class="container nav-container">
+            <!-- Logo -->
+            <a class="navbar-brand" th:href="@{/}">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12 2L2 22H7L12 12L17 22H22L12 2Z" fill="#3B38C3"/>
+                    <path d="M12 15L9 21H15L12 15Z" fill="#fff"/>
+                </svg>
+                <span>lapak<span>baju</span></span>
+            </a>
 
-                    <!-- Right -->
-                    <div class="nav-right">
-                        <ul class="nav-right-items">
-                            <li><a href="#" class="nav-link">Home</a></li>
-                            <li><a href="#" class="nav-link">About</a></li>
-                            <li><a href="#" class="nav-link">Category</a></li>
-                            <li><a href="#" class="nav-link">Products</a></li>
-                            <li class="btn-container">
-                                <button id="nav-login" class="nav-link" th:onclick="|location.href='@{/login}'|">
-                                    Login
-                                </button>
-                            </li>
-                        </ul>
+            <!-- Center Search Option -->
+            <form th:action="@{/products/search}" method="get" class="nav-search">
+                <input type="text" name="keyword" placeholder="Search products..." class="search-input" required>
+                <button type="submit" class="search-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5c5852">
+                        <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-260q133 0 226.5-93.5T700-580q0-133-93.5-226.5T380-900q-133 0-226.5 93.5T60-580q0 133 93.5 226.5T380-260Z"/>
+                    </svg>
+                </button>
+            </form>
 
-                        <!-- Hamburger -->
-                        <button class="nav-menu-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5c5852"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+            <!-- Right -->
+            <div class="nav-right">
+                <ul class="nav-right-items">
+                    <!-- Shopping Cart with Badge -->
+                    <li>
+                        <a th:href="@{/cart}" class="cart-icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5c5852">
+                                <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L704-492q-11 20-29.5 32T633-448H316l-42 76h486v80H280q-43 0-63-36.5t1-73.5l50-90-136-288H40v-80h104l64 136Z"/>
+                            </svg>
+                            <span class="cart-badge">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Profile Avatar -->
+                    <li>
+                        <a th:href="@{/user-profile}" class="profile-avatar">
+                            <!-- Display image if user is logged in and profile image URL exists -->
+                            <img th:if="${user != null and user.profileImage != null}"
+                                 th:src="@{'/uploads/profile/' + ${user.profileImage}}"
+                                 alt="Profile Image"
+                                 class="profile-img">
+
+                            <!-- Fallback to initial 'S' if not logged in or image is missing -->
+                            <span th:unless="${user != null and user.profileImage != null}">S</span>
+                        </a>
+                    </li>
+
+                    <li class="btn-container">
+                        <button id="nav-login" class="nav-link" th:onclick="|location.href='@{/login}'|">
+                            Login
                         </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</th:block>
 
-                        <!-- Close -->
-                        <button class="nav-close-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5c5852"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-                        </button>
-                    </div>
-                </div>
-            </nav>
-        </th:block>
+<th:block th:fragment="client-navbar-js">
+    <script th:src="@{/js/client_js/navbar.js}"></script>
+</th:block>
 
-        <th:block th:fragment="client-navbar-js">
-            <script th:src="@{/js/client_js/navbar.js}"></script>
-        </th:block>
-
-    </body>
+</body>
 </html>

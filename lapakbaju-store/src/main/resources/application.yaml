@@ -12,5 +12,15 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    # Spring Boot automatically detects MySQLDialect from the datasource URL,
-    # so keeping 'properties.hibernate.dialect' is optional.
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Custom file storage properties
+file:
+  upload:
+    # Uses system environment variable UPLOAD_PROFILE_DIR if present, else defaults to local path
+    user-profile: ${UPLOAD_PROFILE_DIR:D:/xampp/htdocs/lapakbaju/images/profiles/}
+    product: ${UPLOAD_PRODUCT_DIR:D:/xampp/htdocs/lapakbaju/images/products/}

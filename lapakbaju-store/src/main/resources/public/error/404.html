@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+
+    <link rel="stylesheet" href="/css/error/style_error.css" th:href="@{/css/error/style_error.css}">
+
+</head>
+<body>
+<main class="error-container">
+    <div class="error-code">404</div>
+
+    <h1 class="error-title">
+        Oops! Page Not Found
+    </h1>
+
+    <p class="error-message">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+    </p>
+
+    <!-- Displays requested URL path using Spring Boot's built-in error model -->
+    <div class="error-details" >
+        <p>Requested URL: <code>/unknown-path</code></p>
+    </div>
+
+    <div class="actions">
+        <a href="/" th:href="@{/}" class="btn btn-primary">Go to Homepage</a>
+    </div>
+</main>
+</body>
+</html>
