@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,39 +9,28 @@
         <link rel="stylesheet" th:href="@{/css/product/popular-product.css}">
         <th:block th:replace="~{product_fragments/product-card.html :: product-card-css}"></th:block>
     </th:block>
-
-
 </head>
-
 <body>
 
-    <th:block th:fragment = "popular-product">
-        <section class="container products-section">
-            <!-- Header Controls -->
-            <div class="section-header">
-                <h2 class="section-title">Popular Products</h2>
+<th:block th:fragment="popular-product">
+    <section class="container products-section">
+        <div class="section-header">
+            <h2 class="section-title">Popular Products</h2>
+            <a href="#" class="view-all-link">View All &rarr;</a>
+        </div>
 
-                <a href="#" class="view-all-link">View All &rarr;</a>
-            </div>
+        <div class="products-grid" id="productGrid">
+            <!-- Explicit parameter passing into the product-card fragment -->
+            <th:block th:each="prod : ${products}">
+                <th:block th:replace="~{product_fragments/product-card.html :: product-card(product=${prod})}"></th:block>
+            </th:block>
+        </div>
+    </section>
+</th:block>
 
-             <!-- Product Grid -->
-            <div class="products-grid" id="productGrid">
-
-                <!-- Card 1 -->
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-                <th:block th:replace="~{product_fragments/product-card.html :: product-card}"></th:block>
-
-            </div>
-        </section>
-    </th:block>
-
-    <th:block th:fragment="popular-product-js">
-        <script th:src="@{/js/product_js/popular-product.js}"></script>
-    </th:block>
+<th:block th:fragment="popular-product-js">
+    <script th:src="@{/js/product_js/popular-product.js}"></script>
+</th:block>
 
 </body>
 </html>

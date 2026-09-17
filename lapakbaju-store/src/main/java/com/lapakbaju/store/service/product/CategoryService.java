@@ -1,7 +1,7 @@
-package com.lapakbaju.store.service;
+package com.lapakbaju.store.service.product;
 
-import com.lapakbaju.store.entity.category.Category;
-import com.lapakbaju.store.repository.CategoryRepository;
+import com.lapakbaju.store.entity.product.Category;
+import com.lapakbaju.store.repository.product.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

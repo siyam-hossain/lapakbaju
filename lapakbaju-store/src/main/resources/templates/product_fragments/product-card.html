@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,46 +8,47 @@
     <th:block th:fragment="product-card-css">
         <link rel="stylesheet" th:href="@{/css/product/product-card.css}">
     </th:block>
-
 </head>
-
 <body>
 
-
-    <th:block th:fragment="product-card">
-        <div class="product-card">
+<!-- Accepts 'product' parameter directly from the call -->
+<th:block th:fragment="product-card(product)">
+    <div class="product-card" th:if="${product != null}">
+        <a th:href="@{/products/{id}(id=${product.id})}" class="card-image-link">
             <div class="card-image-wrapper">
-                <span class="badge badge-hot">HOT</span>
-                <button class="wishlist-btn" aria-label="Add to Wishlist">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                        </path>
-                    </svg>
-                </button>
+                <!-- Check booleans safely -->
+                <span class="badge badge-hot" th:if="${product.isHot == true}">HOT</span>
+                <span class="badge badge-new" th:if="${product.isNew == true and product.isHot != true}">NEW</span>
 
-                <img
-                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%23333'/><rect x='45' y='10' width='10' height='20' fill='%23666'/><rect x='45' y='70' width='10' height='20' fill='%23666'/></svg>"
-                        alt="Smartwatch">
+                <!-- Image rendering -->
+                <img th:if="${product.image != null and product.image.imageUrl != null}"
+                     th:src="@{'/images/products/' + ${product.image.imageUrl}}"
+                     alt="Product Image" />
 
+                <!-- Fallback image -->
+                <img th:if="${product.image == null or product.image.imageUrl == null}"
+                     th:src="@{/images/default-placeholder.png}"
+                     alt="Default Image" />
             </div>
+        </a>
 
-            <div class="product-category">Electronics</div>
-            <h3 class="product-name">Pro Wireless Smart Watch</h3>
-            <div class="card-footer">
-                <span class="product-price">$149</span>
-                <button class="cart-btn" aria-label="Add to Cart">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                </button>
-            </div>
+        <div class="product-category" th:text="${product.category != null ? product.category.name : 'Uncategorized'}">Category</div>
+        <h3 class="product-name" th:text="${product.name}">Product Name</h3>
+
+        <div class="card-footer">
+            <span class="product-price" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+
+            <button class="cart-btn" aria-label="Add to Cart">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+            </button>
+
         </div>
-    </th:block>
+    </div>
+</th:block>
 
 </body>
-
 </html>

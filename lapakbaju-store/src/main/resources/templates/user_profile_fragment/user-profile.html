@@ -79,7 +79,7 @@
           <div class="profile-information" id="profileView">
             <div class="large-avatar">
               <img th:if="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
-                   th:src="@{'/uploads/profile/' + ${user.profileImage}}" alt="Profile Image"/>
+                   th:src="@{'/images/profiles/' + ${user.profileImage}}" alt="Profile Image"/>
               <span th:unless="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
                     th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">S</span>
             </div>

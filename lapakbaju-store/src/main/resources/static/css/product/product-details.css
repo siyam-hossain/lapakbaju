@@ -1,0 +1,453 @@
+/* =========================================================
+   Product Details — main container only
+   Palette + type tokens scoped to this page's own component.
+   Spacing/radius/font-size tokens reused from global.css.
+========================================================= */
+
+.main-container {
+    --pd-paper: var(--surface);
+    --pd-paper-deep: var(--gray-50);
+    --pd-ink: var(--gray-900);
+    --pd-ink-soft: var(--gray-700);
+    --pd-line: var(--gray-200);
+    --pd-indigo: var(--primary);
+    --pd-indigo-deep: #2c11a1; /* ~15% darker than --primary for hover */
+    --pd-ochre: var(--warning);
+    --pd-sage: var(--success);
+    --pd-rust: var(--error);
+
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui: var(--font-family, 'Inter', sans-serif);
+
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-16);
+    font-family: var(--font-ui);
+    color: var(--pd-ink);
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--pd-ink-soft);
+    margin-bottom: var(--space-6);
+}
+
+.breadcrumb a {
+    color: var(--pd-ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+    color: var(--pd-indigo);
+    border-color: var(--pd-indigo);
+}
+
+.breadcrumb .divider {
+    color: var(--pd-line);
+}
+
+.breadcrumb .active {
+    color: var(--pd-ink);
+    font-weight: 600;
+}
+
+/* Primary surface */
+.product-card-surface {
+    background: var(--pd-paper);
+    border: 1px solid var(--pd-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-6);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+}
+
+@media (min-width: 992px) {
+    .product-card-surface {
+        grid-template-columns: 460px 1fr;
+        gap: var(--space-12);
+        padding: var(--space-10);
+    }
+}
+
+/* Left column: gallery */
+.product-gallery {
+    position: relative;
+}
+
+.main-image-card {
+    position: sticky;
+    top: var(--space-8);
+    background-color: var(--pd-paper-deep);
+    border: 1px solid var(--pd-line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.main-image-card:hover .product-featured-img {
+    transform: scale(1.025);
+}
+
+/* Badges — fabric care-label style, not filled pills */
+.badge-stack {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    z-index: 5;
+}
+
+.badge {
+    font-family: var(--font-ui);
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: var(--space-1) var(--space-3);
+    background: var(--pd-paper);
+    border-left: 3px solid var(--pd-ink);
+    color: var(--pd-ink);
+}
+
+.badge-hot { border-left-color: var(--pd-rust); }
+.badge-new { border-left-color: var(--pd-indigo); }
+.badge-featured { border-left-color: var(--pd-ochre); }
+
+/* Right column: info */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+}
+
+.category-chip {
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--pd-line);
+}
+
+.sku-code {
+    font-family: var(--font-ui);
+    font-size: var(--fs-caption);
+    color: var(--pd-ink-soft);
+}
+
+.product-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    color: var(--pd-ink);
+    line-height: 1.15;
+    margin-bottom: var(--space-2);
+}
+
+/* Price + stock: swing-tag treatment */
+.price-stock-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-2) 0 var(--space-4);
+}
+
+.price-amount {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+    font-weight: 600;
+    color: var(--pd-ink);
+    background: var(--pd-paper);
+    border: 1.5px solid var(--pd-ink);
+    border-radius: 3px 10px 10px 3px;
+    padding: var(--space-2) var(--space-5) var(--space-2) var(--space-6);
+    transform: rotate(-2deg);
+    animation: pd-tag-settle 0.5s ease-out;
+}
+
+.price-amount::before {
+    /* the punch hole */
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--pd-ink);
+    background: var(--pd-paper-deep);
+    transform: translateY(-50%);
+}
+
+.price-amount::after {
+    /* the stitched thread color accent */
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: -6px;
+    width: 14px;
+    height: 10px;
+    border: 1.5px dashed var(--pd-ochre);
+    border-bottom: none;
+    border-radius: 50% 50% 0 0;
+    transform: rotate(8deg);
+}
+
+@keyframes pd-tag-settle {
+    from { transform: rotate(6deg) translateY(-4px); opacity: 0; }
+    to   { transform: rotate(-2deg) translateY(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .price-amount { animation: none; }
+}
+
+.stock-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-small);
+    color: var(--pd-ink-soft);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.in-stock { background-color: var(--pd-sage); }
+.status-dot.out-of-stock { background-color: var(--pd-rust); }
+.status-text.out-of-stock-text { color: var(--pd-rust); }
+
+.short-desc {
+    font-size: var(--fs-body);
+    color: var(--pd-ink-soft);
+    line-height: 1.6;
+    max-width: 62ch;
+}
+
+/* Purchase box — dashed "stitched" border */
+.purchase-box {
+    background: var(--pd-paper);
+    border: 1.5px dashed var(--pd-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+}
+
+.action-row {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-end;
+}
+
+.quantity-control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.qty-label {
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    color: var(--pd-ink-soft);
+}
+
+.stepper-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--pd-ink);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    height: 48px;
+    background: var(--pd-paper);
+}
+
+.stepper-btn {
+    background: transparent;
+    border: none;
+    width: 38px;
+    height: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--pd-ink);
+    transition: background 0.2s ease;
+}
+
+.stepper-btn:hover {
+    background: var(--pd-paper-deep);
+}
+
+.stepper-wrapper input[type="number"] {
+    width: 48px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--pd-ink);
+    -moz-appearance: textfield;
+}
+
+.stepper-wrapper input::-webkit-outer-spin-button,
+.stepper-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btn-add-cart {
+    flex-grow: 1;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    background-color: var(--pd-indigo);
+    color: var(--pd-paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-add-cart:hover:not(:disabled) {
+    background-color: var(--pd-indigo-deep);
+}
+
+.btn-add-cart:disabled {
+    background-color: var(--pd-line);
+    color: var(--pd-ink-soft);
+    cursor: not-allowed;
+}
+
+.btn-add-cart:focus-visible,
+.stepper-btn:focus-visible,
+.breadcrumb a:focus-visible {
+    outline: 2px solid var(--pd-indigo);
+    outline-offset: 2px;
+}
+
+/* Tags — swatch-label style */
+.product-tags {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.tags-title {
+    font-size: var(--fs-small);
+    color: var(--pd-ink-soft);
+}
+
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fs-caption);
+    color: var(--pd-ink);
+    border: 1px solid var(--pd-line);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+}
+
+.tag-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--pd-ochre);
+    flex-shrink: 0;
+}
+
+/* Full description */
+.full-desc-section {
+    border-top: 1px solid var(--pd-line);
+    padding-top: var(--space-6);
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    color: var(--pd-ink);
+    margin-bottom: var(--space-3);
+}
+
+.desc-content {
+    font-size: var(--fs-body);
+    color: var(--pd-ink-soft);
+    line-height: 1.7;
+    max-width: 70ch;
+}
+
+/* Empty state */
+.not-found-card {
+    background: var(--pd-paper);
+    border: 1px solid var(--pd-line);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    padding: var(--space-16) var(--space-6);
+}
+
+.not-found-card h2 {
+    font-family: var(--font-display);
+    font-size: var(--fs-h1);
+    color: var(--pd-ink);
+    margin-bottom: var(--space-3);
+}
+
+.not-found-card p {
+    color: var(--pd-ink-soft);
+    margin-bottom: var(--space-6);
+}
+
+.btn-back {
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    background-color: var(--pd-indigo);
+    color: var(--pd-paper);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-back:hover {
+    background-color: var(--pd-indigo-deep);
+}

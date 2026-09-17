@@ -53,7 +53,7 @@
               <div class="edit-avatar" id="editAvatar">
                 <img id="profileImagePreview"
                      th:if="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
-                     th:src="@{'/uploads/profile/' + ${user.profileImage}}" alt="Profile Preview"/>
+                     th:src="@{'/images/profiles/' + ${user.profileImage}}" alt="Profile Preview"/>
                 <span id="avatarInitial"
                       th:unless="${user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
                       th:text="${#strings.substring(user.name, 0, 1).toUpperCase()}">S</span>
@@ -201,7 +201,7 @@
 
           <!-- BOTTOM ACTION BUTTONS -->
           <div class="account-actions">
-            <a th:href="@{/account}" class="outline-button" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px;">
+            <a th:href="@{/user-profile}" class="outline-button" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px;">
               Cancel
             </a>
 

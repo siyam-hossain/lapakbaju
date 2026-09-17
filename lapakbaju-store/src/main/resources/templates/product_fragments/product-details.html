@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${product != null ? product.name + ' - Lapak Baju' : 'Product Details'}">Product Details</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+
+  <!-- CSS Links -->
+  <link rel="stylesheet" th:href="@{/css/global.css}"> <!-- Your main global variables file -->
+  <link rel="stylesheet" th:href="@{/css/product/product-details.css}">
+  <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+  <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+</head>
+<body>
+
+<header>
+  <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<div class="container main-container">
+
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a th:href="@{/}">Home</a>
+    <span class="divider">/</span>
+    <a th:href="@{/products}">Products</a>
+    <span class="divider">/</span>
+    <span class="active" th:text="${product != null ? product.name : 'Product'}">Product Name</span>
+  </nav>
+
+  <!-- Product Details Surface Card -->
+  <main class="product-card-surface" th:if="${product != null}">
+
+    <!-- LEFT COLUMN: Sticky Image Gallery -->
+    <section class="product-gallery">
+      <div class="main-image-card">
+        <!-- Badges Overlay -->
+        <div class="badge-stack">
+          <span class="badge badge-hot" th:if="${product.isHot == true}">Hot</span>
+          <span class="badge badge-new" th:if="${product.isNew == true and product.isHot != true}">New</span>
+          <span class="badge badge-featured" th:if="${product.isFeatured == true}">Featured</span>
+        </div>
+
+        <!-- Product Image -->
+        <img th:if="${product.image != null and product.image.imageUrl != null}"
+             th:src="@{'/images/products/' + ${product.image.imageUrl}}"
+             th:alt="${product.name}"
+             class="product-featured-img" />
+
+        <!-- Fallback Image -->
+        <img th:if="${product.image == null or product.image.imageUrl == null}"
+             th:src="@{/images/default-placeholder.png}"
+             alt="Default Product Image"
+             class="product-featured-img" />
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: Content Block -->
+    <section class="product-info">
+
+      <!-- Header: Title, Category & SKU -->
+      <div class="product-header">
+        <div class="meta-header">
+          <span class="category-chip"
+                th:style="${product.category != null ? 'background:' + product.category.bg + '; color:' + product.category.color : ''}"
+                th:text="${product.category != null ? product.category.name : 'Uncategorized'}">
+            Category
+          </span>
+          <span class="sku-code" th:text="${'SKU ' + product.sku}">SKU 000000</span>
+        </div>
+
+        <h1 class="product-title" th:text="${product.name}">Product Name</h1>
+
+        <div class="price-stock-row">
+          <div class="price-amount" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">
+            $0.00
+          </div>
+
+          <div class="stock-badge" th:if="${product.inventory != null}">
+            <span class="status-dot" th:classappend="${product.inventory.stockQuantity > 0 ? 'in-stock' : 'out-of-stock'}"></span>
+            <span class="status-text" th:if="${product.inventory.stockQuantity > 0}" th:text="${'In stock — ' + product.inventory.stockQuantity + ' left'}">In stock</span>
+            <span class="status-text out-of-stock-text" th:if="${product.inventory.stockQuantity <= 0}">Out of stock</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Short Description -->
+      <div class="short-desc" th:if="${product.shortDescription != null and !product.shortDescription.isEmpty()}">
+        <p th:text="${product.shortDescription}">A short summary description of the product goes here.</p>
+      </div>
+
+      <!-- Purchasing Block -->
+      <div class="purchase-box">
+        <form th:action="@{/cart/add}" method="POST" class="add-to-cart-form">
+          <input type="hidden" name="productId" th:value="${product.id}" />
+
+          <div class="action-row">
+            <!-- Stepper Quantity Input -->
+            <div class="quantity-control">
+              <label for="quantity" class="qty-label">Quantity</label>
+              <div class="stepper-wrapper">
+                <button type="button" class="stepper-btn" onclick="this.nextElementSibling.stepDown()" aria-label="Decrease quantity">-</button>
+                <input type="number"
+                       id="quantity"
+                       name="quantity"
+                       value="1"
+                       min="1"
+                       th:max="${product.inventory != null ? product.inventory.stockQuantity : 1}"
+                       th:disabled="${product.inventory == null or product.inventory.stockQuantity <= 0}" />
+                <button type="button" class="stepper-btn" onclick="this.previousElementSibling.stepUp()" aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button type="submit"
+                    class="btn-add-cart"
+                    th:disabled="${product.inventory == null or product.inventory.stockQuantity <= 0}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span>Add to bag</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tags Section -->
+      <div class="product-tags" th:if="${product.tags != null and !product.tags.isEmpty()}">
+        <span class="tags-title">Tags:</span>
+        <div class="tag-cloud">
+          <span class="tag-pill" th:each="tag : ${product.tags}" th:text="${tag.name}">Tag Name</span>
+        </div>
+      </div>
+
+      <!-- Full Description Box -->
+      <div class="full-desc-section" th:if="${product.fullDescription != null and !product.fullDescription.isEmpty()}">
+        <h2 class="section-title">Product details</h2>
+        <div class="desc-content" th:utext="${product.fullDescription}">
+          Full product description text...
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Empty State -->
+  <div class="not-found-card" th:if="${product == null}">
+    <h2>Product not found</h2>
+    <p>The product you are looking for does not exist or has been removed.</p>
+    <a th:href="@{/products}" class="btn-back">Browse products</a>
+  </div>
+
+</div>
+
+<th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+<th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+
+</body>
+</html>

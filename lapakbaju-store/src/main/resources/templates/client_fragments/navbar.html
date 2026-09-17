@@ -49,13 +49,14 @@
                     <li>
                         <a th:href="@{/user-profile}" class="profile-avatar">
                             <!-- Display image if user is logged in and profile image URL exists -->
-                            <img th:if="${user != null and user.profileImage != null}"
-                                 th:src="@{'/uploads/profile/' + ${user.profileImage}}"
+                            <img th:if="${user != null and user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                                 th:src="@{'/images/profiles/' + ${user.profileImage}}"
                                  alt="Profile Image"
                                  class="profile-img">
 
-                            <!-- Fallback to initial 'S' if not logged in or image is missing -->
-                            <span th:unless="${user != null and user.profileImage != null}">S</span>
+                            <!-- Fallback to initial if user is not logged in or image is missing -->
+                            <span th:unless="${user != null and user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
+                                  th:text="${user != null and user.name != null ? #strings.substring(user.name, 0, 1).toUpperCase() : 'S'}">S</span>
                         </a>
                     </li>
 

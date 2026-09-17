@@ -16,16 +16,15 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Format paths into valid file URIs (e.g. file:///D:/xampp/htdocs/lapakbaju/images/profiles/)
         String profilePath = formatFileUri(profileUploadDir);
         String productPath = formatFileUri(productUploadDir);
 
-        // Serve profile images: maps /uploads/profile/** -> D:/xampp/htdocs/lapakbaju/images/profiles/
-        registry.addResourceHandler("/uploads/profile/**")
+        // Map http://localhost:8080/images/profiles/** -> D:/xampp/htdocs/lapakbaju/images/profiles/
+        registry.addResourceHandler("/images/profiles/**")
                 .addResourceLocations(profilePath);
 
-        // Serve product images: maps /uploads/product/** -> D:/xampp/htdocs/lapakbaju/images/products/
-        registry.addResourceHandler("/uploads/product/**")
+        // Map http://localhost:8080/images/products/** -> D:/xampp/htdocs/lapakbaju/images/products/
+        registry.addResourceHandler("/images/products/**")
                 .addResourceLocations(productPath);
     }
 
@@ -36,9 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
         if (dirPath.startsWith("file:")) {
             return dirPath;
         }
-        // Replace Windows backslashes with forward slashes
         String normalized = dirPath.replace("\\", "/");
-        // Ensure path ends with a trailing slash
         if (!normalized.endsWith("/")) {
             normalized += "/";
         }
