@@ -75,7 +75,8 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/api/categories",
-                                "/products/**"
+                                "/products/**",
+                                "/cart/**"
 
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")

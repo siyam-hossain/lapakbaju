@@ -37,24 +37,25 @@
                 <ul class="nav-right-items">
                     <!-- Shopping Cart with Badge -->
                     <li>
-                        <a th:href="@{/cart}" class="cart-icon-container">
+                        <a th:href="@{/cart}" class="cart-icon-container" style="position: relative; display: inline-block;">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5c5852">
                                 <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L704-492q-11 20-29.5 32T633-448H316l-42 76h486v80H280q-43 0-63-36.5t1-73.5l50-90-136-288H40v-80h104l64 136Z"/>
                             </svg>
-                            <span class="cart-badge">0</span>
+                            <!-- Badge displays cart item count driven by GlobalControllerAdvice -->
+                            <span class="cart-badge"
+                                  th:if="${cartItemCount != null and cartItemCount > 0}"
+                                  th:text="${cartItemCount}">0</span>
                         </a>
                     </li>
 
                     <!-- Profile Avatar -->
                     <li>
                         <a th:href="@{/user-profile}" class="profile-avatar">
-                            <!-- Display image if user is logged in and profile image URL exists -->
                             <img th:if="${user != null and user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
                                  th:src="@{'/images/profiles/' + ${user.profileImage}}"
                                  alt="Profile Image"
                                  class="profile-img">
 
-                            <!-- Fallback to initial if user is not logged in or image is missing -->
                             <span th:unless="${user != null and user.profileImage != null and !#strings.isEmpty(user.profileImage)}"
                                   th:text="${user != null and user.name != null ? #strings.substring(user.name, 0, 1).toUpperCase() : 'S'}">S</span>
                         </a>
