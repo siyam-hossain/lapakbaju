@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Products - Lapak Baju</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/product/products.css}">
+    <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+    <th:block th:replace="~{footer_fragments/footer.html :: footer-css}"></th:block>
+    <th:block th:replace="~{product_fragments/product-card.html :: product-card-css}"></th:block>
+</head>
+<body>
+
+<header>
+    <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<div class="container main-container">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="divider">/</span>
+        <span class="active">Products</span>
+    </nav>
+
+    <!-- Top Filter Bar (Min/Max Price Range) -->
+    <div class="top-filter-bar">
+        <form th:action="@{/products}" method="GET" class="price-filter-form">
+            <div class="filter-inputs">
+                <label for="minPrice" class="price-label">Price Range:</label>
+                <input type="number" id="minPrice" name="minPrice" th:value="${minPrice}" placeholder="Min ($)" min="0" step="0.01" class="price-input" />
+                <span class="range-dash">—</span>
+                <input type="number" id="maxPrice" name="maxPrice" th:value="${maxPrice}" placeholder="Max ($)" min="0" step="0.01" class="price-input" />
+
+                <button type="submit" class="btn-apply-price">Apply</button>
+                <a th:href="@{/products}" class="btn-reset-price" th:if="${minPrice != null or maxPrice != null}">Reset</a>
+            </div>
+
+            <div class="results-count">
+                Showing <span class="count-highlight" th:text="${products != null ? products.size() : 0}">0</span> items
+            </div>
+        </form>
+    </div>
+
+    <!-- Products Content Grid -->
+    <main class="catalog-content">
+
+        <div class="products-grid" th:if="${products != null and !products.isEmpty()}">
+            <th:block th:each="product : ${products}">
+                <th:block th:replace="~{product_fragments/product-card.html :: product-card(product=${product})}"></th:block>
+            </th:block>
+        </div>
+
+        <!-- Empty State -->
+        <div class="not-found-card" th:if="${products == null or products.isEmpty()}">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <h2>No products found</h2>
+            <p>No products were found within the specified price range.</p>
+            <a th:href="@{/products}" class="btn-reset-large">Reset Price Filter</a>
+        </div>
+
+    </main>
+
+</div>
+
+<th:block th:replace="~{footer_fragments/footer.html :: footer}"></th:block>
+<th:block th:replace="~{client_fragments/navbar.html :: client-navbar-js}"></th:block>
+
+</body>
+</html>
