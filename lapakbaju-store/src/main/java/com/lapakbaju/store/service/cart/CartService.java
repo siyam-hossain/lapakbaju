@@ -3,22 +3,31 @@ package com.lapakbaju.store.service.cart;
 import com.lapakbaju.store.entity.authentication.UserEntity;
 import com.lapakbaju.store.entity.cart.CartItemEntity;
 import com.lapakbaju.store.entity.product.Product;
+import com.lapakbaju.store.entity.user_profile.UserOrderEntity;
 import com.lapakbaju.store.repository.cart.CartRepository;
 import com.lapakbaju.store.repository.product.ProductRepository;
+import com.lapakbaju.store.repository.user_profile.UserOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CartService {
 
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final UserOrderRepository userOrderRepository;
 
-    public CartService(CartRepository cartRepository, ProductRepository productRepository) {
+    public CartService(CartRepository cartRepository,
+                       ProductRepository productRepository,
+                       UserOrderRepository userOrderRepository) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
+        this.userOrderRepository = userOrderRepository;
     }
 
     public List<CartItemEntity> getCartByUser(UserEntity user) {
@@ -90,26 +99,45 @@ public class CartService {
     }
 
     @Transactional
-    public void processCheckout(UserEntity user) {
+    public UserOrderEntity processCheckoutAndPay(UserEntity user, String shippingAddress, String city, String postalCode, String country, String paymentMethod) {
         List<CartItemEntity> cartItems = cartRepository.findByUser(user);
 
-        // Deduct inventory stock for each checked out item
-        for (CartItemEntity item : cartItems) {
-            if (item.getProduct().getInventory() != null) {
-                int currentStock = item.getProduct().getInventory().getStockQuantity();
-                if (item.getQuantity() > currentStock) {
-                    throw new IllegalStateException("Stock limit exceeded for " + item.getProduct().getName());
-                }
-                item.getProduct().getInventory().setStockQuantity(currentStock - item.getQuantity());
-            }
+        if (cartItems.isEmpty()) {
+            throw new IllegalStateException("Cannot checkout with an empty cart");
         }
 
-        // Clear cart items for this user from database
-        cartRepository.deleteByUser(user);
-    }
+        // 1. Calculate total price and deduct inventory stock
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (CartItemEntity item : cartItems) {
+            int stock = item.getProduct().getInventory() != null
+                    ? item.getProduct().getInventory().getStockQuantity()
+                    : 0;
 
-    @Transactional
-    public void clearCart(UserEntity user) {
+            if (item.getQuantity() > stock) {
+                throw new IllegalStateException("Insufficient stock for item: " + item.getProduct().getName());
+            }
+
+            BigDecimal itemTotal = item.getProduct().getPrice()
+                    .multiply(BigDecimal.valueOf(item.getQuantity()));
+            totalPrice = totalPrice.add(itemTotal);
+
+            // Deduct stock from inventory
+            item.getProduct().getInventory().setStockQuantity(stock - item.getQuantity());
+        }
+
+        // 2. Save new order record and link to user
+        UserOrderEntity order = new UserOrderEntity();
+        order.setUser(user); // Foreign key association
+        order.setOrderNumber("ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        order.setTotalPrice(totalPrice);
+        order.setStatus("PAID");
+        order.setOrderDate(LocalDateTime.now());
+
+        UserOrderEntity savedOrder = userOrderRepository.save(order);
+
+        // 3. Clear cart from database
         cartRepository.deleteByUser(user);
+
+        return savedOrder;
     }
 }

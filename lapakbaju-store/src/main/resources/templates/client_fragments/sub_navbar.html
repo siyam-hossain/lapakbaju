@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- SUB NAVBAR FRAGMENT -->
+<nav th:fragment="sub-navbar-fragment" class="sub-nav">
+    <div class="container sub-nav-container">
+
+        <a th:href="@{/}" class="sub-nav-link" th:classappend="${activePage == 'home'} ? 'active' : ''" title="Home">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Home</span>
+        </a>
+
+        <a th:href="@{/products}" class="sub-nav-link" th:classappend="${activePage == 'products'} ? 'active' : ''" title="Products">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Products</span>
+        </a>
+
+        <a th:href="@{/categories}" class="sub-nav-link" th:classappend="${activePage == 'categories'} ? 'active' : ''" title="Categories">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Categories</span>
+        </a>
+
+        <a th:href="@{/about}" class="sub-nav-link" th:classappend="${activePage == 'about'} ? 'active' : ''" title="About Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>About</span>
+        </a>
+
+        <a th:href="@{/contact}" class="sub-nav-link" th:classappend="${activePage == 'contact'} ? 'active' : ''" title="Contact Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>Contact</span>
+        </a>
+
+    </div>
+</nav>
+
+</body>
+</html>
