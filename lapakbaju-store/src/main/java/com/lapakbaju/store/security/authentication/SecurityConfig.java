@@ -18,9 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-
 public class SecurityConfig {
+
     private final CustomUserDetailsService userService;
+    private final CustomAuthenticationSuccessHandler successHandler; // Inject handler
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,12 +47,12 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/")
+                        .successHandler(successHandler) // Replaced defaultSuccessUrl("/")
                         .permitAll()
                 )
                 .rememberMe(remember -> remember
-                        .tokenValiditySeconds(7*24*60*60)
-                        .rememberMeParameter("remember-me")
+                                .tokenValiditySeconds(7 * 24 * 60 * 60)
+                                .rememberMeParameter("remember-me")
                         //.useSecureCookie(true)
                 )
                 .logout(logout -> logout
@@ -79,7 +80,6 @@ public class SecurityConfig {
                                 "/cart/**",
                                 "/about",
                                 "/contact/**"
-
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

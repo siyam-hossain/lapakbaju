@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics - Lapakbaju</title>
+
+    <!-- Design tokens & existing navbar/footer styles -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+    <th:block th:replace="~{footer_fragments/footer :: footer-css}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Existing Navbar -->
+<header>
+    <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<div class="admin-wrapper" id="adminWrapper">
+    <!-- Sidebar Navigation (sticky: always visible while scrolling) -->
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+        <div class="sidebar-head">
+            <span class="sidebar-title">Admin panel</span>
+            <button class="sidebar-toggle-btn" id="sidebarToggle" type="button"
+                    title="Collapse sidebar" aria-label="Collapse sidebar" aria-expanded="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="11 17 6 12 11 7"/>
+                    <polyline points="18 17 13 12 18 7"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="sidebar-group">
+            <span class="sidebar-group-label">Overview</span>
+            <ul class="sidebar-menu">
+                <li>
+                    <a th:href="@{/admin/analytics}" class="sidebar-link active" aria-current="page">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                        <span class="sidebar-text">Analytics</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-group">
+            <span class="sidebar-group-label">Products</span>
+            <ul class="sidebar-menu">
+                <li>
+                    <a th:href="@{/admin/products}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                        <span class="sidebar-text">All products</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/add}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        <span class="sidebar-text">Add product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/update}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                        </svg>
+                        <span class="sidebar-text">Update product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/delete}" class="sidebar-link danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            <path d="M10 11v6"/>
+                            <path d="M14 11v6"/>
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                        </svg>
+                        <span class="sidebar-text">Delete product</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-foot">
+            <a th:href="@{/}" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/>
+                    <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                <span class="sidebar-text">Back to store</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Analytics Content Area -->
+    <main class="admin-content">
+        <div class="page-head">
+            <h1>Analytics</h1>
+            <p>How your store is performing.</p>
+        </div>
+
+        <!-- Cards Section -->
+        <div class="dashboard-cards">
+            <div class="card card--green">
+                <div class="card-top">
+                    <span class="card-title">Total earning</span>
+                    <span class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="card-value" th:text="'$' + ${#numbers.formatDecimal(totalEarning, 1, 2)}">$0.00</div>
+            </div>
+            <div class="card">
+                <div class="card-top">
+                    <span class="card-title">Number of orders</span>
+                    <span class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="card-value" th:text="${totalOrders}">0</div>
+            </div>
+        </div>
+
+        <!-- Visual Charts -->
+        <div class="charts-grid">
+            <!-- Revenue Area Chart (Full Width) -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Revenue trend</h3>
+                    <p>Monthly revenue in USD</p>
+                </div>
+                <div class="chart-container chart-container-revenue">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 2/3 and 1/3 Split -->
+            <div class="charts-row-split">
+                <!-- Product Stock Bar Chart (2/3 width) -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Product stock</h3>
+                        <p>Units in stock per product</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="frequencyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Market Cap Doughnut Chart (1/3 width) -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Market cap per product</h3>
+                        <p>Share of total value</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketCapChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Existing Footer -->
+<th:block th:replace="~{footer_fragments/footer :: footer}"></th:block>
+
+<!-- Sidebar: sticky offset + collapse toggle -->
+<script>
+    (function () {
+        const wrapper = document.getElementById('adminWrapper');
+        const sidebar = document.getElementById('adminSidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const links = sidebar.querySelectorAll('.sidebar-link');
+        const STORAGE_KEY = 'adminSidebarCollapsed';
+
+        // 1. Keep the sidebar just below the navbar. Works whether the navbar
+        //    is fixed, sticky, or scrolls away with the page.
+        const navbar = document.querySelector('header nav') || document.querySelector('header');
+        let ticking = false;
+
+        function updateOffset() {
+            const bottom = navbar ? Math.max(0, navbar.getBoundingClientRect().bottom) : 0;
+            wrapper.style.setProperty('--sidebar-offset', Math.round(bottom) + 'px');
+            ticking = false;
+        }
+
+        function requestUpdate() {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updateOffset);
+            }
+        }
+
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+        updateOffset();
+
+        // 2. Collapse / expand (remembered between page loads)
+        function setCollapsed(collapsed) {
+            sidebar.classList.toggle('collapsed', collapsed);
+            toggle.setAttribute('aria-expanded', String(!collapsed));
+            const label = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+            toggle.title = label;
+            toggle.setAttribute('aria-label', label);
+
+            // Show a native tooltip on each icon while the labels are hidden
+            links.forEach((link) => {
+                const text = link.querySelector('.sidebar-text');
+                if (collapsed && text) link.title = text.textContent.trim();
+                else link.removeAttribute('title');
+            });
+
+            try { localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0'); } catch (e) { /* storage unavailable */ }
+        }
+
+        let saved = false;
+        try { saved = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { /* storage unavailable */ }
+        if (saved) setCollapsed(true);
+
+        toggle.addEventListener('click', () => setCollapsed(!sidebar.classList.contains('collapsed')));
+    })();
+</script>
+
+<!-- Chart Initialization Script -->
+<script th:inline="javascript">
+    // 1. Dynamic Data Injected from AdminAnalyticsController
+    const revenueMonths = /*[[${revenueMonths}]]*/ [];
+    const monthlyRevenues = /*[[${monthlyRevenues}]]*/ [];
+    const productNames = /*[[${productNames}]]*/ [];
+    const productFrequencies = /*[[${productFrequencies}]]*/ [];
+    const marketCaps = /*[[${marketCaps}]]*/ [];
+
+    // 2. Shared theme (reads tokens from main.css, falls back to defaults)
+    const cssVar = (name, fallback) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+
+    const PRIMARY  = cssVar('--primary', '#3b17cd');
+    const INK      = cssVar('--gray-900', '#351c14');
+    const MUTED    = cssVar('--gray-500', '#8a8178');
+    const GRID     = cssVar('--gray-200', '#efeae6');
+    const SURFACE  = cssVar('--surface', '#ffffff');
+
+    const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    const usdCompact = new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1
+    });
+
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = MUTED;
+    Chart.defaults.plugins.tooltip.backgroundColor = INK;
+    Chart.defaults.plugins.tooltip.padding = 10;
+    Chart.defaults.plugins.tooltip.cornerRadius = 8;
+    Chart.defaults.plugins.tooltip.titleFont = { weight: '600' };
+
+    const truncate = (text, max) => text.length > max ? text.slice(0, max - 1) + '…' : text;
+
+    // 3. Revenue Trend Area Chart
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: revenueMonths,
+            datasets: [{
+                label: 'Revenue',
+                data: monthlyRevenues,
+                fill: true,
+                backgroundColor: (context) => {
+                    const { ctx, chartArea } = context.chart;
+                    if (!chartArea) return 'rgba(59, 23, 205, 0.12)';
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, 'rgba(59, 23, 205, 0.28)');
+                    gradient.addColorStop(1, 'rgba(59, 23, 205, 0)');
+                    return gradient;
+                },
+                borderColor: PRIMARY,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 6,
+                pointBackgroundColor: SURFACE,
+                pointBorderColor: PRIMARY,
+                pointBorderWidth: 2,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    displayColors: false,
+                    callbacks: { label: (item) => usd.format(item.parsed.y) }
+                }
+            },
+            scales: {
+                x: { grid: { display: false }, border: { display: false } },
+                y: {
+                    beginAtZero: true,
+                    border: { display: false },
+                    grid: { color: GRID },
+                    ticks: { callback: (value) => usdCompact.format(value) }
+                }
+            }
+        }
+    });
+
+    // 4. Product Stock Bar Chart
+    new Chart(document.getElementById('frequencyChart'), {
+        type: 'bar',
+        data: {
+            labels: productNames,
+            datasets: [{
+                label: 'In stock',
+                data: productFrequencies,
+                backgroundColor: PRIMARY,
+                hoverBackgroundColor: '#6a4dff',
+                borderRadius: 6,
+                borderSkipped: false,
+                maxBarThickness: 44
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    displayColors: false,
+                    callbacks: { label: (item) => item.parsed.y + ' units' }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: {
+                        maxRotation: 45,
+                        autoSkip: true,
+                        callback: function (value) {
+                            return truncate(this.getLabelForValue(value), 12);
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    border: { display: false },
+                    grid: { color: GRID },
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+
+    // 5. Market Cap Doughnut Chart (with total in the centre)
+    const doughnutPalette = [
+        PRIMARY, '#6a4dff', '#22c55e', '#f59e0b', '#3b82f6', '#cf1321', '#14b8a6', '#ec4899'
+    ];
+
+    const centerTotal = {
+        id: 'centerTotal',
+        afterDraw(chart) {
+            const { ctx, chartArea } = chart;
+            const values = chart.data.datasets[0].data;
+            let total = 0;
+            values.forEach((value, i) => {
+                if (chart.getDataVisibility(i)) total += Number(value);
+            });
+            const x = (chartArea.left + chartArea.right) / 2;
+            const y = (chartArea.top + chartArea.bottom) / 2;
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = INK;
+            ctx.font = "700 20px 'Inter', sans-serif";
+            ctx.fillText(usdCompact.format(total), x, y - 8);
+            ctx.fillStyle = MUTED;
+            ctx.font = "500 12px 'Inter', sans-serif";
+            ctx.fillText('Total value', x, y + 14);
+            ctx.restore();
+        }
+    };
+
+    new Chart(document.getElementById('marketCapChart'), {
+        type: 'doughnut',
+        data: {
+            labels: productNames,
+            datasets: [{
+                data: marketCaps,
+                backgroundColor: productNames.map((_, i) => doughnutPalette[i % doughnutPalette.length]),
+                borderColor: SURFACE,
+                borderWidth: 2,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '68%',
+            layout: { padding: 4 },
+            plugins: {
+                legend: {
+                    position: 'right',
+                    align: 'center',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        boxWidth: 8,
+                        padding: 12,
+                        generateLabels: (chart) => {
+                            const base = Chart.overrides.doughnut.plugins.legend.labels.generateLabels(chart);
+                            base.forEach((item) => { item.text = truncate(item.text, 14); });
+                            return base;
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (item) => {
+                            const total = item.dataset.data.reduce((a, b) => a + Number(b), 0);
+                            const pct = total ? (item.parsed / total * 100).toFixed(1) : '0.0';
+                            return ' ' + usd.format(item.parsed) + ' (' + pct + '%)';
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [centerTotal]
+    });
+</script>
+</body>
+</html>
