@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Product List</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
+    <th:block th:replace="~{footer_fragments/footer :: footer-css}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/admin/admin-layout.css}">
+</head>
+<body>
+
+<!-- Top Navbar Integration -->
+<header>
+    <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
+</header>
+
+<div class="admin-wrapper">
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+        <div class="sidebar-head">
+            <span class="sidebar-title">Admin panel</span>
+            <button class="sidebar-toggle-btn" id="sidebarToggle" type="button"
+                    title="Collapse sidebar" aria-label="Collapse sidebar" aria-expanded="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="11 17 6 12 11 7"/>
+                    <polyline points="18 17 13 12 18 7"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="sidebar-group">
+            <span class="sidebar-group-label">Overview</span>
+            <ul class="sidebar-menu">
+                <li>
+                    <a th:href="@{/admin/analytics}" class="sidebar-link" aria-current="page">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                        <span class="sidebar-text">Analytics</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-group">
+            <span class="sidebar-group-label">Products</span>
+            <ul class="sidebar-menu">
+                <li>
+                    <a th:href="@{/admin/products}" class="sidebar-link active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"/>
+                            <line x1="8" y1="12" x2="21" y2="12"/>
+                            <line x1="8" y1="18" x2="21" y2="18"/>
+                            <line x1="3" y1="6" x2="3.01" y2="6"/>
+                            <line x1="3" y1="12" x2="3.01" y2="12"/>
+                            <line x1="3" y1="18" x2="3.01" y2="18"/>
+                        </svg>
+                        <span class="sidebar-text">All products</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/add}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        <span class="sidebar-text">Add product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/update}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                        </svg>
+                        <span class="sidebar-text">Update product</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/products/delete}" class="sidebar-link danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                            <path d="M10 11v6"/>
+                            <path d="M14 11v6"/>
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                        </svg>
+                        <span class="sidebar-text">Delete product</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-foot">
+            <a th:href="@{/}" class="sidebar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"/>
+                    <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                <span class="sidebar-text">Back to store</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Container -->
+    <main class="admin-main">
+        <div class="page-header">
+            <h2>Product List</h2>
+            <a th:href="@{/admin/products/add}" class="btn-primary-action">+ Add New Product</a>
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+            <table class="product-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Badges</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.id}">1</td>
+                    <td>
+                        <img th:if="${product.image != null and product.image.imageUrl != null}"
+                             th:src="@{'/images/products/' + ${product.image.imageUrl}}"
+                             alt="Product Image" class="product-thumb"/>
+                        <span th:unless="${product.image != null and product.image.imageUrl != null}">N/A</span>
+                    </td>
+                    <td>
+                        <strong th:text="${product.name}">Product Name</strong>
+                        <p class="short-desc" th:text="${product.shortDescription}">Short description...</p>
+                    </td>
+                    <td th:text="${product.sku}">SKU-001</td>
+                    <td>
+                                <span class="badge-category"
+                                      th:if="${product.category != null}"
+                                      th:text="${product.category.name}">Category</span>
+                        <span th:unless="${product.category != null}">Uncategorized</span>
+                    </td>
+                    <td th:text="${' $' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    <td>
+                                <span th:if="${product.inventory != null}"
+                                      th:text="${product.inventory.stockQuantity}"
+                                      th:classappend="${product.inventory.stockQuantity <= product.inventory.recorderThreshold} ? 'text-danger' : ''">0</span>
+                        <span th:unless="${product.inventory != null}">N/A</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-hot" th:if="${product.isHot}">HOT</span>
+                        <span class="badge badge-new" th:if="${product.isNew}">NEW</span>
+                        <span class="badge badge-featured" th:if="${product.isFeatured}">FEATURED</span>
+                    </td>
+                    <td>
+                                <span class="badge-status" th:classappend="${product.isActive} ? 'status-active' : 'status-inactive'"
+                                      th:text="${product.isActive} ? 'Active' : 'Inactive'">Active</span>
+                    </td>
+                    <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">2026-01-01</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(products)}">
+                    <td colspan="10" class="text-center">No products found.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<!-- Footer Integration -->
+<div th:replace="~{footer_fragments/footer :: footer}"></div>
+
+<script>
+    document.getElementById('sidebarToggle')?.addEventListener('click', function () {
+        document.getElementById('adminSidebar').classList.toggle('collapsed');
+    });
+</script>
+</body>
+</html>
