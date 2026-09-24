@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Add Product</title>
+    <title>Admin - Update Product</title>
 
-    <!-- Global & Admin CSS -->
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
     <th:block th:replace="~{footer_fragments/footer :: footer-css}"></th:block>
 
-    <!-- Shared with the Update Product page -->
-    <link rel="stylesheet" th:href="@{/css/admin/add-product.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/update-product.css}">
 </head>
 <body>
 
@@ -20,12 +18,12 @@
 </header>
 
 <div class="admin-wrapper">
-    <!-- Admin Sidebar -->
+    <!-- Navigation Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
         <div class="sidebar-head">
             <span class="sidebar-title">Admin panel</span>
-            <button class="sidebar-toggle-btn" id="sidebarToggle" type="button"
-                    title="Collapse sidebar" aria-label="Collapse sidebar" aria-expanded="true">
+            <button class="sidebar-toggle-btn" id="sidebarToggle" type="button" title="Collapse sidebar"
+                    aria-label="Collapse sidebar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="11 17 6 12 11 7"/>
@@ -33,24 +31,6 @@
                 </svg>
             </button>
         </div>
-
-        <div class="sidebar-group">
-            <span class="sidebar-group-label">Overview</span>
-            <ul class="sidebar-menu">
-                <li>
-                    <a th:href="@{/admin/analytics}" class="sidebar-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="20" x2="18" y2="10"/>
-                            <line x1="12" y1="20" x2="12" y2="4"/>
-                            <line x1="6" y1="20" x2="6" y2="14"/>
-                        </svg>
-                        <span class="sidebar-text">Analytics</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
         <div class="sidebar-group">
             <span class="sidebar-group-label">Products</span>
             <ul class="sidebar-menu">
@@ -61,15 +41,12 @@
                             <line x1="8" y1="6" x2="21" y2="6"/>
                             <line x1="8" y1="12" x2="21" y2="12"/>
                             <line x1="8" y1="18" x2="21" y2="18"/>
-                            <line x1="3" y1="6" x2="3.01" y2="6"/>
-                            <line x1="3" y1="12" x2="3.01" y2="12"/>
-                            <line x1="3" y1="18" x2="3.01" y2="18"/>
                         </svg>
                         <span class="sidebar-text">All products</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/admin/products/add}" class="sidebar-link active" aria-current="page">
+                    <a th:href="@{/admin/products/add}" class="sidebar-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/>
@@ -81,17 +58,6 @@
                 </li>
             </ul>
         </div>
-
-        <div class="sidebar-foot">
-            <a th:href="@{/}" class="sidebar-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"/>
-                    <polyline points="12 19 5 12 12 5"/>
-                </svg>
-                <span class="sidebar-text">Back to store</span>
-            </a>
-        </div>
     </aside>
 
     <!-- Main Content -->
@@ -101,18 +67,19 @@
             <nav class="breadcrumb" aria-label="Breadcrumb">
                 <a th:href="@{/admin/products}">Products</a>
                 <span aria-hidden="true">/</span>
-                <span>Add</span>
+                <span>Update</span>
             </nav>
 
             <div class="page-header">
-                <h2>Add product</h2>
+                <h2>Update product</h2>
+                <span class="id-chip">#<span th:text="${product.id}">1</span></span>
             </div>
-            <p class="page-sub">Fill in the details below to add a new product to the store.</p>
+            <p class="page-sub" th:text="${product.name}">Product name</p>
 
             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
-            <form id="productForm" th:action="@{/admin/products/add}" th:object="${product}" method="post"
-                  enctype="multipart/form-data" class="admin-form">
+            <form id="productForm" th:action="@{'/admin/products/update/' + ${product.id}}" th:object="${product}"
+                  method="post" enctype="multipart/form-data" class="admin-form">
 
                 <!-- Basic details -->
                 <section class="form-section">
@@ -123,20 +90,19 @@
                     <div class="field-grid">
                         <div class="form-group full-width">
                             <label for="name">Product name <span class="required-mark" aria-hidden="true">*</span></label>
-                            <input type="text" id="name" th:field="*{name}" class="form-input" required
-                                   placeholder="e.g. Classic Denim Jacket" />
+                            <input type="text" id="name" th:field="*{name}" class="form-input" required />
                         </div>
 
                         <div class="form-group">
                             <label for="sku">SKU <span class="required-mark" aria-hidden="true">*</span></label>
-                            <input type="text" id="sku" th:field="*{sku}" class="form-input" required
-                                   placeholder="e.g. SKU-1002" />
+                            <input type="text" id="sku" th:field="*{sku}" class="form-input" required />
                         </div>
 
                         <div class="form-group">
                             <label for="categoryName">Category</label>
-                            <input type="text" id="categoryName" name="categoryName" class="form-input"
-                                   placeholder="e.g. Mens Wear" />
+                            <input type="text" id="categoryName" name="categoryName"
+                                   th:value="${product.category != null ? product.category.name : ''}"
+                                   class="form-input" />
                         </div>
                     </div>
                 </section>
@@ -153,20 +119,22 @@
                             <div class="input-affix">
                                 <span class="affix" aria-hidden="true">$</span>
                                 <input type="number" step="0.01" min="0" id="price" th:field="*{price}"
-                                       class="form-input" required placeholder="0.00" />
+                                       class="form-input" required />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="stockQuantity">Stock quantity <span class="required-mark" aria-hidden="true">*</span></label>
-                            <input type="number" id="stockQuantity" name="stockQuantity" value="0"
-                                   class="form-input" required min="0" />
+                            <label for="stockQuantity">Stock quantity</label>
+                            <input type="number" min="0" id="stockQuantity" name="stockQuantity"
+                                   th:value="${product.inventory != null ? product.inventory.stockQuantity : 0}"
+                                   class="form-input" />
                         </div>
 
                         <div class="form-group">
-                            <label for="recorderThreshold">Reorder threshold</label>
-                            <input type="number" id="recorderThreshold" name="recorderThreshold" value="10"
-                                   class="form-input" min="0" />
+                            <label for="reorderThreshold">Reorder threshold</label>
+                            <input type="number" min="0" id="reorderThreshold" name="reorderThreshold"
+                                   th:value="${product.inventory != null ? product.inventory.recorderThreshold : 10}"
+                                   class="form-input" />
                         </div>
                     </div>
                 </section>
@@ -181,51 +149,13 @@
                         <div class="form-group full-width">
                             <label for="shortDescription">Short description</label>
                             <textarea id="shortDescription" th:field="*{shortDescription}" class="form-textarea"
-                                      rows="2" placeholder="Brief overview..."></textarea>
+                                      rows="2"></textarea>
                         </div>
 
                         <div class="form-group full-width">
                             <label for="fullDescription">Full description</label>
                             <textarea id="fullDescription" th:field="*{fullDescription}" class="form-textarea"
-                                      rows="5" placeholder="Detailed product specifications..."></textarea>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Category appearance -->
-                <section class="form-section">
-                    <div class="section-info">
-                        <h3>Category appearance</h3>
-                        <p>How the category looks in the store.</p>
-                    </div>
-                    <div class="field-grid cols-3">
-                        <div class="form-group">
-                            <label for="categoryIcon">Icon code</label>
-                            <input type="text" id="categoryIcon" name="categoryIcon" class="form-input"
-                                   value="shirt" placeholder="e.g. shirt" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="categoryBg">Background color</label>
-                            <div class="input-affix">
-                                <span class="affix" aria-hidden="true"><span class="swatch" id="bgSwatch"></span></span>
-                                <input type="text" id="categoryBg" name="categoryBg" class="form-input"
-                                       value="#f3f4f6" placeholder="e.g. #f3f4f6" />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="categoryColor">Text color</label>
-                            <div class="input-affix">
-                                <span class="affix" aria-hidden="true"><span class="swatch" id="textSwatch"></span></span>
-                                <input type="text" id="categoryColor" name="categoryColor" class="form-input"
-                                       value="#1f2937" placeholder="e.g. #1f2937" />
-                            </div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <span class="field-hint">Preview</span>
-                            <span class="category-chip" id="categoryChip">Category</span>
+                                      rows="5"></textarea>
                         </div>
                     </div>
                 </section>
@@ -272,16 +202,22 @@
                 <section class="form-section">
                     <div class="section-info">
                         <h3>Product image</h3>
-                        <p>The main photo customers will see.</p>
+                        <p th:text="${product.image != null and product.image.imageUrl != null} ? 'Leave this empty to keep the current image.' : 'Add a photo customers will see.'">
+                            Leave this empty to keep the current image.
+                        </p>
                     </div>
                     <div class="image-field">
-                        <div class="image-preview is-empty" id="imagePreviewBox">
+                        <div class="image-preview" id="imagePreviewBox"
+                             th:classappend="${product.image == null or product.image.imageUrl == null} ? 'is-empty' : ''">
+                            <img th:if="${product.image != null and product.image.imageUrl != null}"
+                                 th:src="@{'/images/products/' + ${product.image.imageUrl}}"
+                                 alt="Current product image" />
                             <span class="image-placeholder">No image yet</span>
                         </div>
 
-                        <div class="dropzone" id="dropzone">
+                        <div class="dropzone">
                             <span class="dropzone-title">Choose an image or drop it here</span>
-                            <span class="dropzone-hint" id="fileName">PNG, JPG, WEBP or GIF, up to 5MB</span>
+                            <span class="dropzone-hint" id="fileName">Any image file</span>
                             <input type="file" id="imageFile" name="imageFile" accept="image/*"
                                    aria-label="Product image" />
                         </div>
@@ -290,33 +226,25 @@
 
                 <!-- Actions -->
                 <div class="form-actions">
-                    <span class="form-status" id="formStatus" role="status">Fields marked * are required</span>
+                    <span class="form-status" id="formStatus" role="status">No changes yet</span>
                     <a th:href="@{/admin/products}" class="btn-secondary-action">Cancel</a>
-                    <button type="submit" class="btn-primary-action" id="saveBtn">Save product</button>
+                    <button type="submit" class="btn-primary-action" id="saveBtn">Save changes</button>
                 </div>
             </form>
         </div>
     </main>
 </div>
 
-<!-- Footer -->
 <div th:replace="~{footer_fragments/footer :: footer}"></div>
 
 <script>
     // Sidebar: collapse on small screens, toggle on click
     var sidebar = document.getElementById('adminSidebar');
-    var sidebarToggle = document.getElementById('sidebarToggle');
-
-    function syncSidebarState() {
-        sidebarToggle.setAttribute('aria-expanded', String(!sidebar.classList.contains('collapsed')));
-    }
     if (window.matchMedia('(max-width: 768px)').matches) {
         sidebar.classList.add('collapsed');
     }
-    syncSidebarState();
-    sidebarToggle.addEventListener('click', function () {
+    document.getElementById('sidebarToggle')?.addEventListener('click', function () {
         sidebar.classList.toggle('collapsed');
-        syncSidebarState();
     });
 
     // Form: unsaved-changes hint and save button state
@@ -337,34 +265,13 @@
     });
     window.addEventListener('pageshow', function () {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Save product';
+        saveBtn.textContent = 'Save changes';
     });
 
-    // Category preview: chip and swatches follow the fields
-    var nameInput = document.getElementById('categoryName');
-    var bgInput = document.getElementById('categoryBg');
-    var textInput = document.getElementById('categoryColor');
-    var chip = document.getElementById('categoryChip');
-    var bgSwatch = document.getElementById('bgSwatch');
-    var textSwatch = document.getElementById('textSwatch');
-
-    function updateCategoryPreview() {
-        chip.textContent = nameInput.value.trim() || 'Category';
-        chip.style.backgroundColor = bgInput.value;
-        chip.style.color = textInput.value;
-        bgSwatch.style.backgroundColor = bgInput.value;
-        textSwatch.style.backgroundColor = textInput.value;
-    }
-    [nameInput, bgInput, textInput].forEach(function (el) {
-        el.addEventListener('input', updateCategoryPreview);
-    });
-    updateCategoryPreview();
-
-    // Image: live preview and drag-over highlight
+    // Image: live preview of the newly chosen file
     var imageInput = document.getElementById('imageFile');
     var previewBox = document.getElementById('imagePreviewBox');
     var fileName = document.getElementById('fileName');
-    var dropzone = document.getElementById('dropzone');
 
     imageInput.addEventListener('change', function () {
         var file = imageInput.files[0];
@@ -379,13 +286,6 @@
         img.src = URL.createObjectURL(file);
         previewBox.classList.remove('is-empty');
         fileName.textContent = file.name;
-    });
-
-    ['dragenter', 'dragover'].forEach(function (name) {
-        dropzone.addEventListener(name, function () { dropzone.classList.add('dragover'); });
-    });
-    ['dragleave', 'drop'].forEach(function (name) {
-        dropzone.addEventListener(name, function () { dropzone.classList.remove('dragover'); });
     });
 </script>
 </body>

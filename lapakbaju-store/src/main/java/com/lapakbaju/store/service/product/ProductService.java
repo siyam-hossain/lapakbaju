@@ -35,14 +35,34 @@ public class ProductService {
     }
 
     @Transactional
-    public Product saveProduct(Product product, String categoryName, String categoryIcon, String categoryBg, String categoryColor, Integer stockQuantity, Integer reorderThreshold, MultipartFile imageFile) throws IOException {
-        // Set Defaults for Booleans
-        if (product.getIsHot() == null) product.setIsHot(false);
-        if (product.getIsNew() == null) product.setIsNew(false);
-        if (product.getIsFeatured() == null) product.setIsFeatured(false);
-        if (product.getIsActive() == null) product.setIsActive(true);
+    public Product saveOrUpdateProduct(Product productInput, String categoryName, String categoryIcon, String categoryBg, String categoryColor, Integer stockQuantity, Integer reorderThreshold, MultipartFile imageFile) throws IOException {
 
-        // Bind or Create Category Manually with mandatory entity fields
+        Product product;
+        boolean isEdit = productInput.getId() != null;
+
+        if (isEdit) {
+            product = productRepository.findById(productInput.getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            product.setName(productInput.getName());
+            product.setSku(productInput.getSku());
+            product.setPrice(productInput.getPrice());
+            product.setShortDescription(productInput.getShortDescription());
+            product.setFullDescription(productInput.getFullDescription());
+            product.setIsHot(productInput.getIsHot() != null ? productInput.getIsHot() : false);
+            product.setIsNew(productInput.getIsNew() != null ? productInput.getIsNew() : false);
+            product.setIsFeatured(productInput.getIsFeatured() != null ? productInput.getIsFeatured() : false);
+            product.setIsActive(productInput.getIsActive() != null ? productInput.getIsActive() : false);
+        } else {
+            product = productInput;
+            if (product.getIsHot() == null) product.setIsHot(false);
+            if (product.getIsNew() == null) product.setIsNew(false);
+            if (product.getIsFeatured() == null) product.setIsFeatured(false);
+            if (product.getIsActive() == null) product.setIsActive(true);
+            product.setCreatedAt(LocalDateTime.now());
+        }
+
+        // Bind Category
         if (StringUtils.hasText(categoryName)) {
             String trimmedName = categoryName.trim();
             Category category = categoryRepository.findByNameIgnoreCase(trimmedName)
@@ -59,7 +79,10 @@ public class ProductService {
         }
 
         // Bind Inventory
-        Inventory inventory = new Inventory();
+        Inventory inventory = product.getInventory();
+        if (inventory == null) {
+            inventory = new Inventory();
+        }
         inventory.setStockQuantity(stockQuantity != null ? stockQuantity : 0);
         inventory.setRecorderThreshold(reorderThreshold != null ? reorderThreshold : 10);
         product.setInventory(inventory);
@@ -67,13 +90,15 @@ public class ProductService {
         // Handle Image Upload
         if (imageFile != null && !imageFile.isEmpty()) {
             String filename = uploadImage(imageFile);
-            ProductImage productImage = new ProductImage();
+            ProductImage productImage = product.getImage();
+            if (productImage == null) {
+                productImage = new ProductImage();
+            }
             productImage.setImageUrl(filename);
             productImage.setIsMain(true);
             product.setImage(productImage);
         }
 
-        product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
 
         return productRepository.save(product);
@@ -94,5 +119,21 @@ public class ProductService {
         file.transferTo(serverFile);
 
         return newFilename;
+    }
+
+    @Transactional
+    public void deleteProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+
+        // Optional: Remove image file from local storage
+        if (product.getImage() != null && StringUtils.hasText(product.getImage().getImageUrl())) {
+            File file = new File(productUploadDir + product.getImage().getImageUrl());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+
+        productRepository.delete(product);
     }
 }

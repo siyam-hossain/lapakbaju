@@ -9,11 +9,10 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <th:block th:replace="~{client_fragments/navbar.html :: client-navbar}"></th:block>
     <th:block th:replace="~{footer_fragments/footer :: footer-css}"></th:block>
-    <link rel="stylesheet" th:href="@{/css/admin/admin-layout.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/product-list.css}">
 </head>
 <body>
 
-<!-- Top Navbar Integration -->
 <header>
     <th:block th:replace="~{client_fragments/navbar.html :: navbar-fragment}"></th:block>
 </header>
@@ -31,12 +30,11 @@
                 </svg>
             </button>
         </div>
-
         <div class="sidebar-group">
             <span class="sidebar-group-label">Overview</span>
             <ul class="sidebar-menu">
                 <li>
-                    <a th:href="@{/admin/analytics}" class="sidebar-link" aria-current="page">
+                    <a th:href="@{/admin/analytics}" class="sidebar-link">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="20" x2="18" y2="10"/>
@@ -48,7 +46,6 @@
                 </li>
             </ul>
         </div>
-
         <div class="sidebar-group">
             <span class="sidebar-group-label">Products</span>
             <ul class="sidebar-menu">
@@ -77,31 +74,8 @@
                         <span class="sidebar-text">Add product</span>
                     </a>
                 </li>
-                <li>
-                    <a th:href="@{/admin/products/update}" class="sidebar-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
-                        </svg>
-                        <span class="sidebar-text">Update product</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/admin/products/delete}" class="sidebar-link danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6"/>
-                            <path d="M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                        <span class="sidebar-text">Delete product</span>
-                    </a>
-                </li>
             </ul>
         </div>
-
         <div class="sidebar-foot">
             <a th:href="@{/}" class="sidebar-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -114,84 +88,161 @@
         </div>
     </aside>
 
-    <!-- Main Content Container -->
     <main class="admin-main">
         <div class="page-header">
-            <h2>Product List</h2>
-            <a th:href="@{/admin/products/add}" class="btn-primary-action">+ Add New Product</a>
+            <div>
+                <h1>Products</h1>
+                <p class="page-sub"><span id="resultCount" th:text="${#lists.size(products)}">0</span> in your catalog</p>
+            </div>
+            <a th:href="@{/admin/products/add}" class="btn-primary-action">Add product</a>
         </div>
 
-        <!-- Products Table -->
-        <div class="table-container">
-            <table class="product-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>SKU</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Badges</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="product : ${products}">
-                    <td th:text="${product.id}">1</td>
-                    <td>
-                        <img th:if="${product.image != null and product.image.imageUrl != null}"
-                             th:src="@{'/images/products/' + ${product.image.imageUrl}}"
-                             alt="Product Image" class="product-thumb"/>
-                        <span th:unless="${product.image != null and product.image.imageUrl != null}">N/A</span>
-                    </td>
-                    <td>
-                        <strong th:text="${product.name}">Product Name</strong>
-                        <p class="short-desc" th:text="${product.shortDescription}">Short description...</p>
-                    </td>
-                    <td th:text="${product.sku}">SKU-001</td>
-                    <td>
-                                <span class="badge-category"
-                                      th:if="${product.category != null}"
-                                      th:text="${product.category.name}">Category</span>
-                        <span th:unless="${product.category != null}">Uncategorized</span>
-                    </td>
-                    <td th:text="${' $' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
-                    <td>
-                                <span th:if="${product.inventory != null}"
-                                      th:text="${product.inventory.stockQuantity}"
-                                      th:classappend="${product.inventory.stockQuantity <= product.inventory.recorderThreshold} ? 'text-danger' : ''">0</span>
-                        <span th:unless="${product.inventory != null}">N/A</span>
-                    </td>
-                    <td>
-                        <span class="badge badge-hot" th:if="${product.isHot}">HOT</span>
-                        <span class="badge badge-new" th:if="${product.isNew}">NEW</span>
-                        <span class="badge badge-featured" th:if="${product.isFeatured}">FEATURED</span>
-                    </td>
-                    <td>
-                                <span class="badge-status" th:classappend="${product.isActive} ? 'status-active' : 'status-inactive'"
-                                      th:text="${product.isActive} ? 'Active' : 'Inactive'">Active</span>
-                    </td>
-                    <td th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'yyyy-MM-dd HH:mm') : '-'}">2026-01-01</td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(products)}">
-                    <td colspan="10" class="text-center">No products found.</td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="table-card">
+            <!-- Toolbar: search + status filter (client-side) -->
+            <div class="toolbar">
+                <input type="search" id="productSearch" class="toolbar-search"
+                       placeholder="Search by name, SKU or category" aria-label="Search products">
+                <select id="statusFilter" class="toolbar-select" aria-label="Filter by status">
+                    <option value="all">All statuses</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="table-scroll">
+                <table class="product-table">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th class="num">Price</th>
+                        <th class="num">Stock</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th class="col-actions"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="productBody">
+                    <tr class="product-row" th:each="product : ${products}"
+                        th:attr="data-status=${product.isActive} ? 'active' : 'inactive'">
+
+                        <!-- Product: image + name + id / sku -->
+                        <td>
+                            <div class="product-cell">
+                                <img th:if="${product.image != null and product.image.imageUrl != null}"
+                                     th:src="@{'/images/products/' + ${product.image.imageUrl}}"
+                                     alt="" class="product-thumb"/>
+                                <span th:unless="${product.image != null and product.image.imageUrl != null}"
+                                      class="product-thumb product-thumb-empty">No image</span>
+                                <div class="product-info">
+                                    <strong class="product-name" th:text="${product.name}">Product Name</strong>
+                                    <span class="product-meta">
+                                        ID <span th:text="${product.id}">1</span> &middot; <span th:text="${product.sku}">SKU-001</span>
+                                    </span>
+                                    <span class="short-desc" th:if="${product.shortDescription != null}"
+                                          th:text="${product.shortDescription}">Short description...</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="badge-category" th:if="${product.category != null}"
+                                  th:text="${product.category.name}">Category</span>
+                            <span class="muted" th:unless="${product.category != null}">Uncategorized</span>
+                        </td>
+
+                        <td class="num" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+
+                        <td class="num">
+                            <span th:if="${product.inventory != null}"
+                                  th:text="${product.inventory.stockQuantity}"
+                                  th:classappend="${product.inventory.stockQuantity <= product.inventory.recorderThreshold} ? 'text-danger' : ''">0</span>
+                            <span class="stock-low" th:if="${product.inventory != null and product.inventory.stockQuantity <= product.inventory.recorderThreshold}">Low</span>
+                            <span class="muted" th:unless="${product.inventory != null}">N/A</span>
+                        </td>
+
+                        <!-- Status + tags stacked -->
+                        <td>
+                            <span class="badge-status" th:classappend="${product.isActive} ? 'status-active' : 'status-inactive'"
+                                  th:text="${product.isActive} ? 'Active' : 'Inactive'">Active</span>
+                            <div class="tag-row">
+                                <span class="badge badge-hot" th:if="${product.isHot}">Hot</span>
+                                <span class="badge badge-new" th:if="${product.isNew}">New</span>
+                                <span class="badge badge-featured" th:if="${product.isFeatured}">Featured</span>
+                            </div>
+                        </td>
+
+                        <td class="muted nowrap"
+                            th:text="${product.createdAt != null ? #temporals.format(product.createdAt, 'MMM d, yyyy') : '-'}">Jan 1, 2026</td>
+
+                        <td class="col-actions">
+                            <div class="action-buttons">
+                                <a th:href="@{'/admin/products/update/' + ${product.id}}" class="btn-edit-action">Edit</a>
+                                <form th:action="@{'/admin/products/delete/' + ${product.id}}" method="post"
+                                      onsubmit="return confirm('Delete this product? This cannot be undone.');">
+                                    <button type="submit" class="btn-delete-action">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Empty catalog -->
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="7" class="empty-state">
+                            No products yet. <a th:href="@{/admin/products/add}">Add your first product</a>.
+                        </td>
+                    </tr>
+                    <!-- Shown by the filter when nothing matches -->
+                    <tr id="noMatchRow" hidden>
+                        <td colspan="7" class="empty-state">No products match your search.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </div>
 
-<!-- Footer Integration -->
 <div th:replace="~{footer_fragments/footer :: footer}"></div>
 
 <script>
+    // Sidebar collapse
     document.getElementById('sidebarToggle')?.addEventListener('click', function () {
-        document.getElementById('adminSidebar').classList.toggle('collapsed');
+        var sidebar = document.getElementById('adminSidebar');
+        sidebar.classList.toggle('collapsed');
+        this.setAttribute('aria-expanded', !sidebar.classList.contains('collapsed'));
     });
+
+    // Search + status filter
+    (function () {
+        var search = document.getElementById('productSearch');
+        var status = document.getElementById('statusFilter');
+        var rows = document.querySelectorAll('#productBody .product-row');
+        var noMatch = document.getElementById('noMatchRow');
+        var count = document.getElementById('resultCount');
+        var total = rows.length;
+
+        function applyFilter() {
+            var q = search.value.trim().toLowerCase();
+            var s = status.value;
+            var shown = 0;
+            rows.forEach(function (row) {
+                var matchText = row.textContent.toLowerCase().indexOf(q) !== -1;
+                var matchStatus = s === 'all' || row.dataset.status === s;
+                var visible = matchText && matchStatus;
+                row.hidden = !visible;
+                if (visible) shown++;
+            });
+            noMatch.hidden = shown !== 0 || total === 0;
+            count.textContent = shown === total ? total : shown + ' of ' + total;
+        }
+
+        search.addEventListener('input', applyFilter);
+        status.addEventListener('change', applyFilter);
+    })();
 </script>
 </body>
 </html>

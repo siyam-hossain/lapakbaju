@@ -46,6 +46,7 @@ public class AdminProductController {
         }
 
         model.addAttribute("product", new Product());
+        model.addAttribute("activePage", "add-product");
         return "admin/add-product";
     }
 
@@ -57,17 +58,78 @@ public class AdminProductController {
             @RequestParam(value = "categoryBg", defaultValue = "#f3f4f6") String categoryBg,
             @RequestParam(value = "categoryColor", defaultValue = "#1f2937") String categoryColor,
             @RequestParam(value = "stockQuantity", defaultValue = "0") Integer stockQuantity,
-            @RequestParam(value = "recorderThreshold", defaultValue = "10") Integer recorderThreshold,
+            @RequestParam(value = "reorderThreshold", defaultValue = "10") Integer reorderThreshold,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            productService.saveProduct(product, categoryName, categoryIcon, categoryBg, categoryColor, stockQuantity, recorderThreshold, imageFile);
+            productService.saveOrUpdateProduct(product, categoryName, categoryIcon, categoryBg, categoryColor, stockQuantity, reorderThreshold, imageFile);
             redirectAttributes.addFlashAttribute("successMessage", "Product created successfully!");
             return "redirect:/admin/products";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to add product: " + e.getMessage());
             return "redirect:/admin/products/add";
         }
+    }
+
+    /**
+     * Endpoint GET: /admin/products/update/{id}
+     * Shows update page populated with product data.
+     */
+    @GetMapping("/update/{id}")
+    public String showUpdateProductForm(@PathVariable("id") Long id, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+        if (principal != null) {
+            UserEntity user = userRepository.findByEmail(principal.getName()).orElse(null);
+            model.addAttribute("user", user);
+        }
+
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product not found!");
+            return "redirect:/admin/products";
+        }
+
+        model.addAttribute("product", product);
+        model.addAttribute("activePage", "update-product");
+        return "admin/update-product";
+    }
+
+    /**
+     * Endpoint POST: /admin/products/update/{id}
+     * Processes product updates.
+     */
+    @PostMapping("/update/{id}")
+    public String processUpdateProduct(
+            @PathVariable("id") Long id,
+            @ModelAttribute("product") Product product,
+            @RequestParam(value = "categoryName", required = false) String categoryName,
+            @RequestParam(value = "categoryIcon", defaultValue = "shirt") String categoryIcon,
+            @RequestParam(value = "categoryBg", defaultValue = "#f3f4f6") String categoryBg,
+            @RequestParam(value = "categoryColor", defaultValue = "#1f2937") String categoryColor,
+            @RequestParam(value = "stockQuantity", defaultValue = "0") Integer stockQuantity,
+            @RequestParam(value = "reorderThreshold", defaultValue = "10") Integer reorderThreshold,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            product.setId(id);
+            productService.saveOrUpdateProduct(product, categoryName, categoryIcon, categoryBg, categoryColor, stockQuantity, reorderThreshold, imageFile);
+            redirectAttributes.addFlashAttribute("successMessage", "Product updated successfully!");
+            return "redirect:/admin/products";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update product: " + e.getMessage());
+            return "redirect:/admin/products/update/" + id;
+        }
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            productService.deleteProductById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete product: " + e.getMessage());
+        }
+        return "redirect:/admin/products";
     }
 }
