@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,13 @@ public class ProductService {
 
     @Value("${file.upload.product:D:/xampp/htdocs/lapakbaju/images/products/}")
     private String productUploadDir;
+
+    public List<Product> searchProducts(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productRepository.searchProducts(keyword.trim());
+    }
 
     public List<Product> getFilteredProducts(BigDecimal minPrice, BigDecimal maxPrice) {
         return productRepository.findByPriceRange(minPrice, maxPrice);

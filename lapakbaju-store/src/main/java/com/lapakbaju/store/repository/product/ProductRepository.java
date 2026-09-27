@@ -21,4 +21,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice
     );
+
+    @Query("SELECT DISTINCT p FROM Product p " +
+            "LEFT JOIN p.tags t " +
+            "WHERE p.isActive = true AND (" +
+            "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(p.shortDescription) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(p.fullDescription) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Product> searchProducts(@Param("keyword") String keyword);
 }
